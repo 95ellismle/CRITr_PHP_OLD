@@ -1,0 +1,93 @@
+<html>
+
+<head>
+  <meta content="text/html" charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>critr</title>
+  <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+  </style>
+
+  <!-- My Styling -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!-- ESRI (arcGIS maps) API and stylesheet -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.12/"></script>
+
+  <script>
+  require([
+      // The map
+      "esri/Map",
+      "esri/views/MapView",
+      // Basemaps
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/BasemapGallery",
+      // Feature Layer
+      "esri/layers/FeatureLayer"
+    ],
+  function(Map, MapView, BasemapToggle, BasemapGallery,
+                FeatureLayer) {
+
+    var map = new Map({
+      basemap: "topo-vector"
+    });
+
+    var view = new MapView({
+      container: "viewDiv",
+      map: map,
+      center: [-2.105367, 53.604835], // longitude, latitude
+      zoom: 15
+    });
+
+    var basemapToggle = new BasemapToggle({
+      view: view,
+      secondMap: "satellite"
+    });
+    view.ui.add(basemapToggle,"bottom-right");
+
+    var crimerRenderer = {
+      type: "simple",  // autocasts as new SimpleRenderer()
+      symbol: {
+        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+        size: 6,
+        color: "black",
+        outline: {
+          width: 0.5,
+          color: 'yellow'
+        }
+      }
+    };
+    var policeDataLayer = new FeatureLayer({
+      url: "https://services5.arcgis.com/DHvzTN3hOyD7Cfq1/arcgis/rest/services/RochdaleOnly_corrSpell/FeatureServer",
+      renderer: crimerRenderer,
+    });
+    map.add(policeDataLayer);
+  });
+
+
+  console.log("BOB");
+  </script>
+
+</head>
+
+
+
+
+<body>
+    <div id="viewDiv">
+    </div
+</body>
+<h1>Stuff below the map (cards)</h1>
+
+</html>
