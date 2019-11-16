@@ -1,3 +1,90 @@
 .mapiframe {
   border:none;
 }
+
+html,
+body,
+#viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 97%;
+    width: 100%;
+    font-family: verdana;
+}
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    max-width: 100%;
+    max-height: 100%;
+}
+#activitiesTitle {
+    height: 3%;
+    text-align: center;
+    color: inherit;
+    vertical-align: middle;
+    margin-bottom: 6%;
+}
+.buttonLink, .buttonLink:hover, .buttonLink:active, .buttonLink:visited, .buttonLink:focus {
+    text-decoration: none;
+    outline: 0;
+    color: inherit;
+    border: 0;
+}
+#cardRow {
+  overflow-y: scroll;
+}
+.cardDivLink {
+   color: inherit;
+   text-decoration: inherit;
+}
+.cardDiv {
+    margin-top: 5px;
+    /* border-bottom: 1px dashed black; */
+    /* border-bottom: 1px solid black; */
+}
+.cardTitle {
+    font-size: 17px;
+    text-align: left;
+}
+.cardTime, .cardDate {
+    font-size: 15px;
+}
+.cardLoc {
+    font-size: 14px;
+    font-style: italic;
+}
+.cardPts {
+    background-color: #006600;
+    color: #ffffff;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ESRI Styling */
+#topbar {
+    background: #fff;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 10px;
+}
+.action-button {
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid #D3D3D3;
+    color: #6e6e6e;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.action-button:hover,
+.action-button:focus {
+    background: #0079c1;
+    color: #e4e4e4;
+}
+.active {
+    background: #0079c1;
+    color: #e4e4e4;
+}
