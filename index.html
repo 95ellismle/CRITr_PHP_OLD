@@ -31,9 +31,41 @@
     #viewDiv {
       padding: 0;
       margin: 0;
-      height: 95%;
+      height: 97%;
       width: 100%;
       font-family: verdana;
+   }
+   html {
+      overflow-x: hidden;
+      overflow-y: hidden;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    #activitiesTitle {
+        height: 3%;
+        line-height: 3%;
+        text-align: center;
+    }
+    
+    .buttonLink, .buttonLink:hover, .buttonLink:active, .buttonLink:visited, .buttonLink:focus {
+        text-decoration: none;
+        outline: 0;
+        border: 0;
+    }
+
+    .cardDiv {
+        /*background-color: #f0f0f0;*/
+        margin: 0;
+    }
+
+    #cardRow {
+        overflow-y: scroll;
+    }
+    
+    .cardTitle {
+        font-size: 18px;
+        text-align: left;
     }
 
     #topbar {
@@ -67,6 +99,23 @@
     }
 
   </style>
+
+  <!-- The card javascript -->
+  <script>
+    function show2Rows() {
+        var cardRow = document.getElementById("cardRow");
+        var mapView = document.getElementById("viewDiv");
+        
+        if (cardRow.style.height == "30%") {
+            cardRow.style.height= "3%";
+            mapView.style.height = "97%";
+        }
+        else {
+            cardRow.style.height= "30%";
+            mapView.style.height = "70%";
+        }
+    }
+  </script>
 
   <script>
   require([
@@ -247,9 +296,86 @@
     	</div>
     </div
 </body>
-<h1 align="center">Activities</h1>
-<script>
 
+<!-- Start the card interface -->
+<a href="#" onclick='show2Rows()' class="buttonLink">
+    <div class="row">
+        <h1 id="activitiesTitle">Activities</h1>
+    </div>
+</a>
+<div class="row col-sm-12" id="cardRow">
+</div>
+<script>
+    activities = [
+                  {'name': 'Evening Patrol', 'date': 'Monday', 'time': '18:00',
+                   'location': 'Fayke street, North', 'points': 150, 'numPeople': 3,
+                   'spacesTaken': 1},
+                  {'name': 'Litter Picking', 'date': 'Wednesday', 'time': '15:30',
+                   'location': 'Prettend Road, West', 'points': 50, 'numPeople': 2,
+                   'spacesTaken': 0},
+                  {'name': 'Litter Picking', 'date': 'Wednesday', 'time': '15:30',
+                   'location': 'Prettend Road, West', 'points': 50, 'numPeople': 2,
+                   'spacesTaken': 0},
+                  {'name': 'Litter Picking', 'date': 'Wednesday', 'time': '15:30',
+                   'location': 'Prettend Road, West', 'points': 50, 'numPeople': 2,
+                   'spacesTaken': 0},
+                  {'name': 'Litter Picking', 'date': 'Wednesday', 'time': '15:30',
+                   'location': 'Prettend Road, West', 'points': 50, 'numPeople': 2,
+                   'spacesTaken': 0},
+                 ];
+    function createCard(dict, i) {
+        var cardDiv = document.createElement("div");
+        cardDiv.id = "card_" + i.toString();
+        cardDiv.className = "cardDiv row";
+        
+        // Add the row break
+        var rowBreak = document.createElement("hr");
+
+        
+        // First column (half size)
+        var colDiv1 = document.createElement("div");
+        colDiv1.className = "col-xs-6";
+
+        // The title of the activity
+        var title = document.createElement("p");
+        title.innerHTML = dict['name'];
+        title.className = "cardTitle";
+        colDiv1.appendChild(title);
+
+        // Second column (quarter)
+        var colDiv2 = document.createElement("div");
+        colDiv2.className = "col-xs-3";
+
+        // Add the date
+        var dateStr = document.createElement("p");
+        dateStr.className = "cardDate";
+        dateStr.innerHTML = dict['date'];
+        colDiv2.appendChild(dateStr);
+
+        // Third column (quarter)
+        var colDiv3 = document.createElement("div");
+        colDiv3.className = "col-xs-3";
+
+        // Create the time
+        var timeStr = document.createElement("p");
+        timeStr.className = "cardTime";
+        timeStr.innerHTML = dict['time'];
+        colDiv3.append(timeStr);
+
+        cardDiv.appendChild(rowBreak);
+        cardDiv.appendChild(colDiv1);
+        cardDiv.appendChild(colDiv2);
+        cardDiv.appendChild(colDiv3);
+
+        return cardDiv;
+    }
+    for (var i=0; i<activities.length; i++) {
+        currDict = activities[i];
+        var cardRow = document.getElementById("cardRow");
+        
+        var cardDiv = createCard(currDict, i);
+        cardRow.appendChild(cardDiv);
+    }
 </script>
 
 </html>
