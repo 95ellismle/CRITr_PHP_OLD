@@ -4,32 +4,44 @@
   <meta content="text/html" charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>CRITr</title>
+  <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+  </style>
 
-  <!-- My Styling -->
+  <!-- My styling and scripts-->
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="cards.js"></script>
+  <script src="maps.js"></script>
+
   <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <!-- Material Design Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <!-- W3 Schools for cards -->
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <!-- ESRI (arcGIS maps) API and stylesheet -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.12/"></script>
+  <!-- W3 Schools Cards -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-  <script src="cards.js"></script>
 
+<!-- Some maps javascript -->
   <script>
   require([
       // The map
       "esri/Map",
       "esri/views/MapView",
-      // Basemap toggle (satelite and nav view)
-      "esri/widgets/BasemapToggle",
+      // // Basemap toggle (satelite and nav view)
+      // "esri/widgets/BasemapToggle",
 	  // Widget to find location of user
       "esri/widgets/Locate",
 	  // Widget for Graphics
@@ -37,7 +49,7 @@
 	  "esri/layers/GraphicsLayer",
 	  "esri/widgets/Sketch/SketchViewModel",
     ],
-  function(Map, MapView, BasemapToggle, Locate, Graphic,
+  function(Map, MapView, Locate, Graphic,
            GraphicsLayer, SketchViewModel) {
 
     let editGraphic;
@@ -142,12 +154,12 @@
 
     });
 
-    // Set the toggle between satelite and standard map
-    var basemapToggle = new BasemapToggle({
-      view: view,
-      secondMap: "satellite"
-    });
-    view.ui.add(basemapToggle,"bottom-right");
+    // // Set the toggle between satelite and standard map
+    // var basemapToggle = new BasemapToggle({
+    //   view: view,
+    //   secondMap: "satellite"
+    // });
+    // view.ui.add(basemapToggle,"bottom-right");
 
 
 	// Will add a widget to zoom into the user
@@ -194,28 +206,87 @@
 
 
 <body>
-    <!-- The Map stuff -->
     <div id="viewDiv">
-		   <div id="topbar">
+  		<div id="topbar">
       		<button class="action-button esri-icon-blank-map-pin" id="pointButton"
-        			    type="button" title="Draw point">
+      			      type="button" title="Draw point">
           </button>
-    	 </div>
+    	</div>
     </div>
 
 <!-- Start the card interface -->
-  <a href="#" onclick='show2Rows()' class="buttonLink">
-      <div class="row">
-          <h1 id="activitiesTitle">Activities</h1>
+<div id="overlay">
+  <div class="hideScroll container-fluid card-block">
+      <div id="cardRow" class="row flex-nowrap card-block">
+
+          <!-- <div class="col-11">
+              <div class="card card-block">
+
+                <div class="cardTop">
+                  <div class="colLeft">
+                    <h5>Litter Picking</h5>
+                  </div>
+                  <div id="colwrap">
+                    <div class="colRight">
+                       <h5>
+                         <i class="material-icons">person</i>
+                         <i class="material-icons">person_outline</i>  &nbsp;
+                       </h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class"cardMiddle">
+                  <div class="colLeft">
+                    <span class="cardWhere">
+                       32 Townsend St, Westwood
+                    </span>
+                  </div>
+
+                  <div class="colRight">
+                    <picture>
+                      <source srcset="img/litterSmall.jpg" media="(min-height: 800px)">
+                      <source srcset="img/litterTiny.jpg" media="(min-height: 640px)">
+                      <img/>
+                    </picture>
+                    &nbsp;
+                  </div>
+                  <div class="breaker"></div> 
+                  <div class="colLeft">
+                    <span class="cardWhere">
+                      Mon, Jun 25<sup>th</sup>, 17:30
+                    </span>
+                  </div>
+                </div>
+
+                <div class="breaker"></div>
+                <div class="cardBottom">
+                    <button type="button" class="btn-sm  btn-primary">Commit</button>
+                    <span class="cardPts"> + 100 pts</span>
+                </div>
+
+
+
+              </div>
+          </div> -->
+
+
+          <!--<div class="col-11">
+              <div class="card card-block">Card</div>
+          </div>
+          <div class="col-11">
+              <div class="card card-block">Card</div>
+          </div> -->
+
       </div>
-  </a>
-  <div class="row col-sm-12" id="cardRow">
   </div>
-
-
+</div>
+  <!-- <div class="row col-sm-12" id="cardRow">
+    <div id="cardDiv">
+    </div>
+  </div> -->
 <script>
     activities = getActivities();
-
     // Loop over all activities and add them to the screen
     var len = activities.length;
     if (len > 10) {
@@ -225,15 +296,11 @@
         currDict = activities[i];
         var cardRow = document.getElementById("cardRow");
 
-        var link = document.createElement("a");
-        link.className = "cardDivLink";
-        link.href = "#";
-
-        var cardDiv = createCard(currDict, i);
-        link.appendChild(cardDiv);
-        cardRow.appendChild(link);
+        var cardDiv = createCardOverlay(currDict, i);
+        cardRow.appendChild(cardDiv);
     }
 </script>
+
 <hr>
 
 </body>
