@@ -1,3 +1,6 @@
+function cancelCreate(){};
+function submitReport(){};
+
 require([
     // The map
     "esri/Map",
@@ -54,16 +57,10 @@ require([
             layer: graphicsLayer,
             pointSymbol,
         });
-
-        setUpClickHandler();
     var coords = {};
-
     view.on("pointer-move", updateCoords);
 
     sketchViewModel.on("create", handleEventCreation);
-    sketchViewModel.on("create-complete", addGraphic);
-    sketchViewModel.on("update-complete", updateGraphic);
-    sketchViewModel.on("update-cancel", updateGraphic);
 
     // Handles updating the coords dict to allow the sketchViewModel.on("create")
     //  access the lat and long
@@ -76,58 +73,30 @@ require([
                 "y": event.y};
     }
 
-    // Handles adding shapes (pins) to the map
-    function addGraphic(event) {
-      const graphic = new Graphic({
-        geometry: event.geometry,
-        symbol: sketchViewModel
-      });
-      graphicsLayer.add(graphic);
-    }
-
     // logic for handling the creation of pins
     function handleEventCreation(event) {
       if (event.state === "complete") {
-         // Check the state of the ok button...
-         // If the user would like to submit then add to databse
+        document.getElementById("submitReportBtn").style.display = "inline-block";
       }
     }
 
-    function updateGraphic(event) {
-      console.log(event);
-      var graphic = new Graphic({
-        geometry: event.geometry,
-        symbol: editGraphic.symbol
-      });
-      graphicsLayer.add(graphic);
+      // After the user presses the OK button
+      submitReport = function() {
+          window.location.href = "reportIncident.html";
+          sessionStorage.setItem("coords", coords);
+      }
 
-      editGraphic = null;
-    }
 
-    function setUpClickHandler() {
-        view.on("click", function (event) {
-        view.hitTest(event).then( function(response) {
-          var results = response.results;
-            if (results.length > 0) {
-              for (var i=0; i< results.length; i++) {
-                // Check if we're editting a graphic
-                if (!editGraphic && results[i].graphic.layer.id === "tempGraphics") {
-                editGraphic = results[i].graphic;
-
-                graphicsLayer.remove(editGraphic);
-                sketchViewModel.update(editGraphic);
-                break
-                }
-              }
-            }
-          });
-        });
+    cancelCreate = function () {
+      sketchViewModel.cancel("point");
+      backToFullMap();
     }
 
     // Create the drop a pin button
     var drawPointButton = document.getElementById("pointButton");
     drawPointButton.onclick = function () {
       sketchViewModel.create("point");
+
       document.getElementById("overlayCards").style.display = 'none';
       document.getElementById("overlayBtn").style.display = 'inline-block';
 

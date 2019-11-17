@@ -41,11 +41,11 @@
 
 <body>
     <!-- Reporting incident navbar -->
-    <div id="reportIncidentBar" class="container">
+    <div id="reportIncidentBar">
       <div class="titleReportTxt"
            style="float: left; width: 15%; display: inline-block">
         <button class="backBtn"
-                onclick="backToFullMap()">
+                onclick="cancelCreate()">
           <i class="material-icons">arrow_back</i>
         </button>
       </div>
@@ -57,9 +57,9 @@
           &nbsp; (Tap to select a location)
         </p>
       </div>
-      <div style="float: right; width: 10%; display: inline-block;">
+      <div id='submitReportBtn' style="float: right; width: 10%; display: none;">
         <button class="backBtn"
-                onclick="backToFullMap()">
+                onclick="submitReport()">
           OK
         </button>
       </div>

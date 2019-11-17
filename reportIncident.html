@@ -1,0 +1,71 @@
+<html>
+
+<head>
+  <meta content="text/html" charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>CRITr</title>
+  <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+  </style>
+
+  <!-- My styling-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Material Design Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!-- ESRI (arcGIS maps) API and stylesheet -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.12/"></script>
+  <!-- W3 Schools Cards -->
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <!-- My Scripts -->
+  <script src="cards.js"></script>
+  <script src="maps.js"></script>
+</head>
+
+
+
+
+<body>
+  <!-- Reporting incident navbar -->
+  <div id="reportIncidentBar" style="display: block: height: 7%">
+    <div class="titleReportTxt"
+         style="float: left; width: 15%; display: inline-block">
+      <button class="backBtn"
+              onclick="cancelCreate()">
+        <i class="material-icons">arrow_back</i>
+      </button>
+    </div>
+    <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
+      <p  class="titleReportTxt">
+        &nbsp; Select Incident Location
+      </p>
+      <p>
+        &nbsp; (Tap to select a location)
+      </p>
+    </div>
+    <div id='submitReportBtn' style="float: right; width: 10%; display: inline-block;">
+      <button class="backBtn"
+              onclick="submitReport()">
+        OK
+      </button>
+    </div>
+  </div>
+  <script>
+    var coords = sessionStorage.getItem("coords");
+  </script>
+</body>
+</html>
