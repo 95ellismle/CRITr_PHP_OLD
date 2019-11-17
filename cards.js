@@ -44,6 +44,32 @@ function getActivities() {
                  ' This space is for that rather than this filler text.',
                  'imageLocation': 'img/litterSmall.jpg',
                },
+               {'title': 'Litter Picking',
+                'date': 'Wednesday',
+                'time': '15:30',
+                'location': 'Prettend Road, West',
+                'points': 50,
+                'numPeople': 2,
+                'spacesTaken': 0, 'details': 'This is a space for more details' +
+                ' on the activity. Maybe there have been suspicious people' +
+                ' in the area and the users need to be warned. That was just' +
+                ' an example but I\'m sure there\'ll be more useful details' +
+                ' This space is for that rather than this filler text.',
+                'imageLocation': 'img/litterSmall.jpg',
+              },
+              {'title': 'Litter Picking',
+               'date': 'Wednesday',
+               'time': '15:30',
+               'location': 'Prettend Road, West',
+               'points': 50,
+               'numPeople': 2,
+               'spacesTaken': 0, 'details': 'This is a space for more details' +
+               ' on the activity. Maybe there have been suspicious people' +
+               ' in the area and the users need to be warned. That was just' +
+               ' an example but I\'m sure there\'ll be more useful details' +
+               ' This space is for that rather than this filler text.',
+               'imageLocation': 'img/litterSmall.jpg',
+             },
                ];
    return activities;
 }
