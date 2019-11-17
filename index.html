@@ -40,6 +40,32 @@
 
 
 <body>
+    <!-- Reporting incident navbar -->
+    <div id="reportIncidentBar" class="container">
+      <div class="titleReportTxt"
+           style="float: left; width: 15%; display: inline-block">
+        <button class="backBtn"
+                onclick="backToFullMap()">
+          <i class="material-icons">arrow_back</i>
+        </button>
+      </div>
+      <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
+        <p  class="titleReportTxt">
+          &nbsp; Select Incident Location
+        </p>
+        <p>
+          &nbsp; (Tap to select a location)
+        </p>
+      </div>
+      <div style="float: right; width: 10%; display: inline-block;">
+        <button class="backBtn"
+                onclick="backToFullMap()">
+          OK
+        </button>
+      </div>
+    </div>
+
+    <!-- ESRI Maps Stuff -->
     <div id="viewDiv">
   		<div id="topbar">
       		<button class="action-button" id="pointButton"
@@ -51,16 +77,19 @@
     </div>
 
 <!-- Start the card interface -->
-<div id="overlay">
+<div id="overlayCards">
   <div class="hideScroll container-fluid card-block">
       <div id="cardRow" class="row flex-nowrap card-block">
       </div>
   </div>
 </div>
-  <!-- <div class="row col-sm-12" id="cardRow">
-    <div id="cardDiv">
-    </div>
-  </div> -->
+<div id="overlayBtn">
+  <button class="action-button" id="activitiesBtn"
+          type="button" title="Report Incident"
+          style="align: center;" onclick="showCards()">
+          <i class="material-icons">keyboard_arrow_up</i>
+  </button>
+</div>
 <script>
     activities = getActivities();
     // Loop over all activities and add them to the screen
@@ -76,8 +105,6 @@
         cardRow.appendChild(cardDiv);
     }
 </script>
-
-<hr>
 
 </body>
 </html>

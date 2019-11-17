@@ -1,16 +1,14 @@
 // Will switch between the map view and the activities-map joint view
-function show2Rows() {
-    var cardRow = document.getElementById("cardRow");
-    var mapView = document.getElementById("viewDiv");
+function showCards() {
+    document.getElementById("overlayBtn").style.display = "none";
+    document.getElementById("overlayCards").style.display = "flex";
+}
 
-    if (cardRow.style.height == "30%") {
-        cardRow.style.height= "4%";
-        mapView.style.height = "97%";
-    }
-    else {
-        cardRow.style.height= "30%";
-        mapView.style.height = "70%";
-    }
+// Will show remove the topBar for the user and go back to how the first screen was
+function backToFullMap() {
+  showCards();
+  document.getElementById("reportIncidentBar").style.display = "none";
+  document.getElementById("viewDiv").style.height = "100%";
 }
 
 // Will get the activities to display on the bottom panel
@@ -81,7 +79,7 @@ function createCardOverlay(dict, i) {
   parentDiv.className = "col-11 col-sm-7 col-md-5 col-lg-3";
 
   var cardDiv = document.createElement("div");
-  cardDiv.className = "card card-block";
+  cardDiv.className = "container card card-block";
   var cardTop = document.createElement("div");
   cardTop.className = "cardTop";
 
@@ -176,9 +174,6 @@ function createCard(dict, i) {
     var cardDiv = document.createElement("div");
     cardDiv.id = "card_" + i.toString();
     cardDiv.className = "cardDiv row";
-
-    // Add the row break
-    // var rowBreak = document.createElement("hr");
 
     // First column (half size)
     var colDiv1_1 = document.createElement("div");
