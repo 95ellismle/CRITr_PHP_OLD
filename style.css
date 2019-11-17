@@ -20,48 +20,32 @@ html {
 .breaker{
     clear:both;
 }
-#activitiesTitle {
-    height: 3%;
-    text-align: center;
-    line-height: 30px;
-    color: inherit;
-    vertical-align: middle;
-    margin-top: 20px;
-    margin-bottom: 6%;
-}
 .buttonLink, .buttonLink:hover, .buttonLink:active, .buttonLink:visited, .buttonLink:focus {
     text-decoration: none;
     outline: 0;
     color: inherit;
     border: 0;
 }
-
 #cardRow ::-webkit-scrollbar {
     display: none;
 }
-
 #cardRow {
   scrollbar-width: none;
   overflow: auto;
 }
-
 .hideScroll {
     overflow: hidden;
 }
-
 .cardDivLink {
    color: inherit;
    text-decoration: inherit;
 }
-
 .cardDiv {
   flex: 1;
 }
-
 .card-block {
     height: 100%;
 }
-
 #overlay {
   position: fixed;
   display: flex;
@@ -69,8 +53,8 @@ html {
   overflow-x: scroll;
   overflow-y: hidden;
   width: 100%;
-  height: 24%;
-  top: 77%;
+  height: 27%;
+  top: 72%;
   left: 0;
   right: 0;
   bottom: 0;
@@ -78,17 +62,6 @@ html {
   z-index: 2;
   cursor: pointer;
 }
-
-#text{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 50px;
-  color: #000;
-  transform: translate(-50%,-50%);
-  -ms-transform: translate(-50%,-50%);
-}
-
 .cardTop {
   /* margin: 0; */
   height: 32%;
@@ -106,7 +79,7 @@ html {
   width: 100%;
   position: absolute;
   bottom: 4%;
-  left: 1%;
+  left: 2%;
 }
 .cardInner {
   display: inline-block;
@@ -121,11 +94,13 @@ html {
   float: right;
   width: 45%;
   height: 100%;
+  overflow-x: hidden;
   /* border: 1px solid black; */
 }
 .evtImg {
   height: 100%;
   width: auto;
+  overflow: hidden;
 }
 .myRow {
   display: inline-block;
@@ -173,13 +148,13 @@ html {
 }
 .action-button {
     font-size: 16px;
-    background-color: transparent;
-    border: 1px solid #D3D3D3;
+    background-color: #fff;
+    border: 0;
     color: #6e6e6e;
-    height: 32px;
-    width: 32px;
-    text-align: center;
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    /* height: 32px; */
+    /* width: 32px; */
+    /* text-align: center; */
+    /* box-shadow: 0 0 1px rgba(0, 0, 0, 0.3); */
 }
 .action-button:hover,
 .action-button:focus {

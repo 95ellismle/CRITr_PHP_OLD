@@ -155,7 +155,7 @@ function createCardOverlay(dict, i) {
 
   var span = document.createElement("span");
   span.className = "cardPts";
-  span.innerHTML = "+ 100 pts";
+  span.innerHTML = "+ " + dict['points'].toString() + " pts";
   cardBottom.appendChild(span);
 
   cardDiv.appendChild(cardBottom);
@@ -164,6 +164,12 @@ function createCardOverlay(dict, i) {
   parentDiv.appendChild(cardDiv);
   return parentDiv;
 }
+
+
+
+
+
+
 
 // Will create the card div to add to the row at the bottom
 function createCard(dict, i) {
