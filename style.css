@@ -5,6 +5,8 @@
 html,
 body,
 #viewDiv {
+    height: 100%;
+    width: 100%;
     padding: 0;
     margin: 0;
     height: 100s%;
@@ -253,6 +255,14 @@ html {
   top: 0;
   z-index: 2;
   /* color: white; */
+}
+.photoBtn {
+  width: 50%;
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 
 /* ESRI Styling */

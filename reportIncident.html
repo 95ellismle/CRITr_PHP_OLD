@@ -4,14 +4,6 @@
   <meta content="text/html" charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>CRITr</title>
-  <style>
-      html, body, #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
-  </style>
 
   <!-- My styling-->
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -94,16 +86,16 @@
         <p class="formSubTitle" id="dateToChange">Tap to Select<p>
     </div>
     <div class="formRow col-12">
+      <input type="text" class="hiddenInput" id="timePicker" onchange="setTime()">
       <p class="formTitle">Time Identified</p>
       <p class="formSubTitle" id="timeToChange">Tap to Select<p>
     </div>
     <div class="formRow col-12"
          onclick="openDetails()">
-      <input type="text" class="hiddenInput" id="timePicker" onchange="setTime()">
       <p class="formTitle">Extra Details</p>
       <p class="formSubTitle" id="detailsToChange">Tap to Select<p>
     </div>
-    <div class="formRow col-12">
+    <div class="formRow col-12" onclick="openPhotoOverlay()">
       <p class="formTitle">Attach Photo</p>
       <p class="formSubTitle" id="photoToChange">Tap to Select<p>
     </div>
@@ -163,6 +155,14 @@
                 placeholder="Enter any extra details you think may be useful in here"></textarea>
    </div>
   </div>
+
+  <!-- The photo overlay -->
+  <!-- <div id="overlayPhoto" class="overlayBox">
+    <div style="height: 15%">
+      <h2>&nbsp; Extra Details</h2>
+    </div>
+
+  </div> -->
 
   <script>
     var coords = JSON.parse(window.localStorage.getItem("coords"));

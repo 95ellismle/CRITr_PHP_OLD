@@ -15,6 +15,11 @@ function closeOverlay() {
   getExtraDetails();
 }
 
+function openPhotoOverlay() {
+  document.getElementById("grayOverlay").style.display = "block";
+  document.getElementById("overlayPhoto").style.display = "block";
+}
+
 function setDate() {
    const date = document.getElementById("datePicker").value;
    document.getElementById("dateToChange").innerHTML = date;
