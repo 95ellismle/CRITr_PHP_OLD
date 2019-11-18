@@ -83,7 +83,7 @@ require([
       // After the user presses the OK button
       submitReport = function() {
           window.location.href = "reportIncident.html";
-          sessionStorage.setItem("coords", coords);
+          window.localStorage.setItem("coords", JSON.stringify(coords));
       }
 
 

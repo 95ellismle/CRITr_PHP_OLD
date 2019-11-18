@@ -25,15 +25,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <!-- ESRI (arcGIS maps) API and stylesheet -->
-  <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.12/"></script>
-  <!-- W3 Schools Cards -->
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <!-- Nice Date Picker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
+
+
 
   <!-- My Scripts -->
-  <script src="cards.js"></script>
-  <script src="maps.js"></script>
+  <script src="form.js"></script>
 </head>
 
 
@@ -41,31 +41,148 @@
 
 <body>
   <!-- Reporting incident navbar -->
-  <div id="reportIncidentBar" style="display: block: height: 7%">
+  <div id="reportIncidentBar" style="display: block">
     <div class="titleReportTxt"
          style="float: left; width: 15%; display: inline-block">
       <button class="backBtn"
-              onclick="cancelCreate()">
+              onclick="backToMap()">
         <i class="material-icons">arrow_back</i>
       </button>
     </div>
     <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
       <p  class="titleReportTxt">
-        &nbsp; Select Incident Location
+        &nbsp; Report Incident
       </p>
       <p>
-        &nbsp; (Tap to select a location)
+        &nbsp; (Fill out the form below)
       </p>
     </div>
-    <div id='submitReportBtn' style="float: right; width: 10%; display: inline-block;">
-      <button class="backBtn"
-              onclick="submitReport()">
-        OK
-      </button>
+
+    <form method="post" id="form" style="display: none">
+        <select id="incidentForm">
+          <option value="Littering">0</option>
+          <option value="Loitering">1</option>
+          <option value="Graffiti">2</option>
+          <option value="Speeding">3</option>
+          <option value="Parking">4</option>
+        </select>
+
+        <textarea id="detailsForm"></textarea>
+
+        <input type="number" id="latForm">
+        <input type="number" id="lonForm">
+        <input type="date" id="dateForm">
+        <input type="time" id="timeForm">
+        <input type="file" id="fileForm">
+    </form>
+  </div>
+
+  <!-- Create the form -->
+  <div class="container form">
+    <div class="formRow col-12" style="border: 0;"
+         onclick="openIncidentSelect()">
+      <p class="formTitle">
+        Incident Type
+      </p>
+      <p class="formSubTitle" id="incidentToChange">
+        Tap to Select
+      <p>
+    </div>
+    <div class="formRow col-12">
+        <input type="text" class="hiddenInput" id="datePicker" onchange="setDate()">
+        <p class="formTitle">Date Identified</p>
+        <p class="formSubTitle" id="dateToChange">Tap to Select<p>
+    </div>
+    <div class="formRow col-12">
+      <p class="formTitle">Time Identified</p>
+      <p class="formSubTitle" id="timeToChange">Tap to Select<p>
+    </div>
+    <div class="formRow col-12"
+         onclick="openDetails()">
+      <input type="text" class="hiddenInput" id="timePicker" onchange="setTime()">
+      <p class="formTitle">Extra Details</p>
+      <p class="formSubTitle" id="detailsToChange">Tap to Select<p>
+    </div>
+    <div class="formRow col-12">
+      <p class="formTitle">Attach Photo</p>
+      <p class="formSubTitle" id="photoToChange">Tap to Select<p>
+    </div>
+    <div class="col-12 buttonRow">
+      <button type="button" class="btn btn-success">Submit</button>
     </div>
   </div>
+
+
+  <!-- The incident type overlay -->
+  <div id="grayOverlay" onclick="closeOverlay()">
+  </div>
+  <div class="overlayBox" id="overlayIncident">
+    <div class="container">
+      <h2>&nbsp; Incident Type</h2>
+      <div class="formBoxes"
+           onclick="selectIncident('Littering')">
+        <p class="formTitle">
+          <i class="material-icons">delete_outline</i> Littering
+        </p>
+      </div>
+      <div class="formBoxes"
+           onclick="selectIncident('Loitering')">
+        <p class="formTitle">
+          <i class="material-icons">group</i> Loitering
+        </p>
+      </div>
+      <div class="formBoxes"
+           onclick="selectIncident('Graffiti')">
+        <p class="formTitle">
+          <i class="material-icons">photo</i> Graffiti
+        </p>
+      </div>
+      <div class="formBoxes"
+           onclick="selectIncident('Speeding')">
+        <p class="formTitle">
+          <i class="material-icons">directions_car</i> Speeding
+        </p>
+      </div>
+      <div class="formBoxes"
+           onclick="selectIncident('Parking')">
+        <p class="formTitle">
+          <i class="material-icons">local_parking</i> Parking
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- The extra details part -->
+  <div id="overlayDetails" class="overlayBox">
+    <div style="height: 15%">
+      <h2>&nbsp; Extra Details</h2>
+    </div>
+    <div style="height: 85%">
+      <textarea class="detailsTxtBox"
+                id="detailsUser"
+                placeholder="Enter any extra details you think may be useful in here"></textarea>
+   </div>
+  </div>
+
   <script>
-    var coords = sessionStorage.getItem("coords");
+    var coords = JSON.parse(window.localStorage.getItem("coords"));
+    document.getElementById("latForm").value = coords['lat'];
+    document.getElementById("lonForm").value = coords['lon'];
+  </script>
+  <script>
+    var dateDiv = document.getElementById("datePicker");
+    dateDiv.flatpickr({
+      enableTime: false,
+      dateFormat: "Y/m/d"
+    })
+    var timDiv = document.getElementById("timePicker");
+    timDiv.flatpickr({
+    enableTime: true,
+    noCalendar: true,
+    time_24hr: true,
+    dateFormat: "H:i",
+});
+
   </script>
 </body>
 </html>
