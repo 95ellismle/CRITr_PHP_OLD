@@ -182,7 +182,7 @@ html {
   height: 15%;
   text-align: left;
   /* border: 1px solid #bfbfbf; */
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+  /* box-shadow: 0 0 1px rgba(0, 0, 0, 0.6); */
   display: block;
   margin: 0;
 }
@@ -219,6 +219,19 @@ html {
   background-color: white;
   z-index: 2;
   display: none;
+  overflow:hidden;
+}
+.overlayBoxSmall {
+  position: absolute;
+  bottom: 40%;
+  /* top: 20%; */
+  height: 20%;
+  left: 5%;
+  width: 90%;
+  background-color: white;
+  z-index: 2;
+  display: none;
+  overflow:hidden;
 }
 #grayOverlay {
   position: absolute;
@@ -236,8 +249,26 @@ html {
   height: 16%;
   text-align: left;
   display: block;
-  border: 1px solid #efefef;
+  /* border: 1px solid #efefef; */
   margin: 0;
+}
+.fillSpace {
+  width: 100%;
+  height: 100%;
+}
+.halfWidth {
+  height: 100%;
+  width: 50%;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.halfHeight {
+  height: 50%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 .formBoxes:hover {
   background: #dfdfdf;
@@ -251,18 +282,19 @@ html {
   height: 100%;
   opacity: 0;
   position: absolute;
-  bottom: 0;
   top: 0;
   z-index: 2;
   /* color: white; */
 }
-.photoBtn {
-  width: 50%;
-  height: 100%;
+.takePhoto:hover {
+  background-color: white;
+  cursor:pointer;
+}
+.takePhoto {
+  background-color: white;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.0);
   border: 0;
-  margin: 0;
-  padding: 0;
-  display: inline-block;
+  border-bottom: 1px solid black;
 }
 
 /* ESRI Styling */

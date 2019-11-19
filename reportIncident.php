@@ -32,6 +32,53 @@
 
 
 <body>
+  <?php
+    $servername = "localhost:3306";
+    $username = "dbBot1";
+    $password = "kZ66R!E5Cl^eh";
+	$dbNmae = "admin_";
+
+    try {
+       $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+       // set the PDO error mode to exception
+       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       }
+    catch(PDOException $e)
+       {
+       echo "Connection failed: " . $e->getMessage();
+       }
+	
+	// define variables and set to empty values
+	$incidentErr = $dateErr = $timeErr = $latErr = $lonErr = $detailsErr = $photoErr = "";
+	$incident = $date = $time = $lat = $lon = $details = $photo = "";
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	  if (empty($_POST["incident"])) {
+		$incidentErr = "* Please select the incident";
+	  } else {
+		  echo test_input($_POST["incident"]);
+		$incident = test_input($_POST["incident"]);
+	  }
+	  //if (emtpy($_POST["incidentForm"])) {
+	  //	 ;
+	  //} else {
+	  //	 $incident = test_input($_POST["incidentForm"]);
+	  //}
+	  $date = test_input($_POST["dateForm"]);
+	  $time = test_input($_POST["timeForm"]);
+	  $lat = test_input($_POST["latForm"]);
+	  $lon = test_input($_POST["lonForm"]);
+	  $details = test_input($_POST["detailsForm"]);
+	  $photo = test_input($_POST["fileForm"]);
+	}
+
+	function test_input($data) {
+	  $data = trim($data);
+	  $data = stripslashes($data);
+	  $data = htmlspecialchars($data);
+	  return $data;
+	}
+  ?>
+	
   <!-- Reporting incident navbar -->
   <div id="reportIncidentBar" style="display: block">
     <div class="titleReportTxt"
@@ -49,24 +96,6 @@
         &nbsp; (Fill out the form below)
       </p>
     </div>
-
-    <form method="post" id="form" style="display: none">
-        <select id="incidentForm">
-          <option value="Littering">0</option>
-          <option value="Loitering">1</option>
-          <option value="Graffiti">2</option>
-          <option value="Speeding">3</option>
-          <option value="Parking">4</option>
-        </select>
-
-        <textarea id="detailsForm"></textarea>
-
-        <input type="number" id="latForm">
-        <input type="number" id="lonForm">
-        <input type="date" id="dateForm">
-        <input type="time" id="timeForm">
-        <input type="file" id="fileForm">
-    </form>
   </div>
 
   <!-- Create the form -->
@@ -77,7 +106,7 @@
         Incident Type
       </p>
       <p class="formSubTitle" id="incidentToChange">
-        Tap to Select
+		  Tap to Select <span class="formErr"><?php echo $incidentErr;?></span>
       <p>
     </div>
     <div class="formRow col-12">
@@ -99,9 +128,30 @@
       <p class="formTitle">Attach Photo</p>
       <p class="formSubTitle" id="photoToChange">Tap to Select<p>
     </div>
-    <div class="col-12 buttonRow">
-      <button type="button" class="btn btn-success">Submit</button>
-    </div>
+	<form method="post" action=""
+		  style="float: right;"> 
+        <select id="incidentForm" style="display: none" name="incident">
+		  <option value=""></option>
+          <option value="Littering">0</option>
+          <option value="Loitering">1</option>
+          <option value="Graffiti">2</option>
+          <option value="Speeding">3</option>
+          <option value="Parking">4</option>
+        </select>
+
+        <textarea id="detailsForm" style="display: none"></textarea>
+
+        <input type="number" id="latForm" step=0.0001 style="display: none">
+        <input type="number" id="lonForm" step=0.0001 style="display: none">
+        <input type="date" id="dateForm" style="display: none">
+        <input type="time" id="timeForm" style="display: none">
+        <input type="file" id="fileForm" style="display: none">
+		<div class="col-12 buttonRow" style="display: block; float: right;">
+      		<button type="submit" name="submit" value="Submit"
+					class="btn btn-success"
+					style="display: block;">Submit</button>
+    	</div>
+    </form>
   </div>
 
 

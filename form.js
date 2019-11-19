@@ -11,6 +11,7 @@ function closeOverlay() {
   document.getElementById("grayOverlay").style.display = "none";
   document.getElementById("overlayDetails").style.display = "none";
   document.getElementById("overlayIncident").style.display = "none";
+  document.getElementById("overlayPhoto").style.display = "none";
 
   getExtraDetails();
 }
