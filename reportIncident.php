@@ -37,7 +37,7 @@
     $username = "dbBot1";
     $password = "kZ66R!E5Cl^eh";
 	$dbNmae = "admin_";
-
+	
     try {
        $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
        // set the PDO error mode to exception
@@ -50,27 +50,113 @@
 	
 	// define variables and set to empty values
 	$incidentErr = $dateErr = $timeErr = $latErr = $lonErr = $detailsErr = $photoErr = "";
+	$incidentC = $dateC = $timeC = $latC = $lonC = $detailsC = $photoC = "Tap To Select";
 	$incident = $date = $time = $lat = $lon = $details = $photo = "";
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	
+	  // Incident Select
 	  if (empty($_POST["incident"])) {
 		$incidentErr = "* Please select the incident";
 	  } else {
-		  echo test_input($_POST["incident"]);
-		$incident = test_input($_POST["incident"]);
+		$incidentErr = validateIncident($_POST['incident']);
+		if ($incidentErr == "") {
+			$incident = test_input($_POST['incident']);
+			$incidentC = $incident;
+		}
 	  }
-	  //if (emtpy($_POST["incidentForm"])) {
-	  //	 ;
-	  //} else {
-	  //	 $incident = test_input($_POST["incidentForm"]);
-	  //}
-	  $date = test_input($_POST["dateForm"]);
-	  $time = test_input($_POST["timeForm"]);
+	 
+		
+	  // Date Select
+	  if (empty($_POST["date"])) {
+		$dateErr = "* Please select the date";
+	  } else {
+		$dateErr = validateDate($_POST['date']);
+		if ($dateErr == "") {
+			$date = test_input($_POST["date"]);
+			$dateC = $date;
+		}
+	  }
+	
+	  // Time Select
+	  if (empty($_POST["time"])) {
+		$timeErr = "* Please select the time";
+	  } else {
+		$timeErr = validateTime($_POST['time']);
+		if ($timeErr == "") {
+			$time = test_input($_POST["time"]);
+			$timeC = $time;
+		}
+	  }
 	  $lat = test_input($_POST["latForm"]);
 	  $lon = test_input($_POST["lonForm"]);
+
 	  $details = test_input($_POST["detailsForm"]);
-	  $photo = test_input($_POST["fileForm"]);
+	
+	  // Photo Upload
+	  if (empty($_POST["photo"])) {
+		$photoErr = "* Please select a photo upload option";
+	  } else {
+		echo test_input($_POST["photo"]);
+		$photo = test_input($_POST["photo"]);
+	  }
 	}
 
+	function validateIncident($value) {
+		$incidentErr = "";
+		$validVals = array("Littering", "Loitering", "Grafiti",
+						   "Speeding", "Parking");
+		if (! in_array($value, $validVals)) {
+			$incidentErr = "* Please select valid entry from: ";
+			for ($i=0; $i<count($validVals); $i++) {
+				$incidentErr = $incidentErr.$validVals[$i].", ";
+			}
+		}
+		return $incidentErr;
+	}
+	
+	function validateTime($time, $format = "H:i") {
+		$err = "";
+		
+		$defaultErr = "* Please select a time";
+		$timeList = explode(":", $time);
+		
+		if (sizeof($timeList) != 2) {
+			return $defaultErr;
+		}
+		
+		if (preg_match("/^\d\d$/", $timeList[0]) == 0) {
+			$err = $defaultErr;
+		}
+		if (preg_match("/^\d\d$/", $timeList[1]) == 0) {
+			$err = $defaultErr;
+		}
+
+		if ($timeList[0] < 25 and $timeList[0] > -1) {
+			if ($timeList[1] > 60 or $timeList[1] < 0) {
+				$err = $defaultErr;
+			}
+		} else {
+			$err = $defaultErr;
+		}
+		echo $err;
+		return $err;
+	}
+	
+	function validateDate($date, $format = 'Y/m/d')
+	{
+		$err = "";
+		$d = DateTime::createFromFormat($format, $date);
+		if ( $d && $d->format($format) === $date) {
+			if ((time() - strtotime($date)) < 0) {
+				echo "Too Late";
+				$err = "* Please choose a date in the past!";
+			}
+		} else {
+			$err = "* Please select a valid date with the date picker";
+		}
+		return $err;
+	}
+	
 	function test_input($data) {
 	  $data = trim($data);
 	  $data = stripslashes($data);
@@ -112,12 +198,14 @@
     <div class="formRow col-12">
         <input type="text" class="hiddenInput" id="datePicker" onchange="setDate()">
         <p class="formTitle">Date Identified</p>
-        <p class="formSubTitle" id="dateToChange">Tap to Select<p>
+        <p class="formSubTitle" id="dateToChange">Tap to Select <span class="formErr"><?php echo $dateErr;?></span>
+		<p>
     </div>
     <div class="formRow col-12">
       <input type="text" class="hiddenInput" id="timePicker" onchange="setTime()">
       <p class="formTitle">Time Identified</p>
-      <p class="formSubTitle" id="timeToChange">Tap to Select<p>
+      <p class="formSubTitle" id="timeToChange">Tap to Select <span class="formErr"><?php echo $timeErr;?></span>
+		<p>
     </div>
     <div class="formRow col-12"
          onclick="openDetails()">
@@ -125,7 +213,8 @@
       <p class="formSubTitle" id="detailsToChange">Tap to Select<p>
     </div>
     <div class="formRow col-12" onclick="openPhotoOverlay()">
-      <p class="formTitle">Attach Photo</p>
+      <p class="formTitle">Attach Photo <span class="formErr"><?php echo $photoErr;?></span>
+		</p>
       <p class="formSubTitle" id="photoToChange">Tap to Select<p>
     </div>
 	<form method="post" action=""
@@ -139,13 +228,13 @@
           <option value="Parking">4</option>
         </select>
 
-        <textarea id="detailsForm" style="display: none"></textarea>
+        <textarea id="detailsForm" style="display: none" name="details"></textarea>
 
-        <input type="number" id="latForm" step=0.0001 style="display: none">
-        <input type="number" id="lonForm" step=0.0001 style="display: none">
-        <input type="date" id="dateForm" style="display: none">
-        <input type="time" id="timeForm" style="display: none">
-        <input type="file" id="fileForm" style="display: none">
+        <input type="number" id="latForm" step=0.0001 style="display: none" name="lat">
+        <input type="number" id="lonForm" step=0.0001 style="display: none" name="lon">
+        <input type="text" id="dateForm" style="display: none" name="date">
+        <input type="text" id="timeForm" style="display: none" name="time">
+        <input type="file" id="fileForm" style="display: none" name="photo">
 		<div class="col-12 buttonRow" style="display: block; float: right;">
       		<button type="submit" name="submit" value="Submit"
 					class="btn btn-success"
@@ -234,15 +323,33 @@
     dateDiv.flatpickr({
       enableTime: false,
       dateFormat: "Y/m/d"
-    })
+    });
+	  
     var timDiv = document.getElementById("timePicker");
     timDiv.flatpickr({
     enableTime: true,
     noCalendar: true,
     time_24hr: true,
     dateFormat: "H:i",
-});
-
+	});
+	  
+	const changers = ['incidentToChange', 'dateToChange', 'timeToChange', 'detailsToChange', 
+					  'photoToChange'];
+	const formSet = ['incidentForm', 'dateForm', 'timeForm', 'detailsForm', 'fileForm'];
+	const changeTo = ["<?php echo $incidentC; ?>", "<?php echo $dateC; ?>",
+					  "<?php echo $timeC; ?>", "<?php echo $detailsC; ?>",
+					  "<?php echo $photoC; ?>"];
+	const changeTo2 = ["<?php echo $incident; ?>", "<?php echo $date; ?>",
+					   "<?php echo $time; ?>", "<?php echo $details; ?>",
+					   "<?php echo $photo; ?>"];
+	const changeToErr = ["<?php echo $incidentErr; ?>", "<?php echo $dateErr; ?>",
+					  	 "<?php echo $timeErr; ?>", "<?php echo $detailsErr; ?>",
+						 "<?php echo $photoErr; ?>"];
+	
+	for (var i=0; i<changers.length; i++) {
+		document.getElementById(changers[i]).innerHTML = changeTo[i] + '<span class="formErr">'+changeToErr[i]+'</span>';
+		document.getElementById(formSet[i]).value = changeTo2[i];
+	}
   </script>
 </body>
 </html>
