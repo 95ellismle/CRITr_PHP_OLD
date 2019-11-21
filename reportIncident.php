@@ -33,22 +33,8 @@
 
 <body>
   <?php
-    $servername = "localhost:3306";
-    $username = "dbBot1";
-    $password = "kZ66R!E5Cl^eh";
-	$dbNmae = "admin_";
-	
-    try {
-       $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
-       // set the PDO error mode to exception
-       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-       }
-    catch(PDOException $e)
-       {
-       echo "Connection failed: " . $e->getMessage();
-       }
-	
 	// define variables and set to empty values
+	$allOK = true;
 	$incidentErr = $dateErr = $timeErr = $latErr = $lonErr = $detailsErr = $photoErr = "";
 	$incidentC = $dateC = $timeC = $latC = $lonC = $detailsC = $photoC = "Tap To Select";
 	$incident = $date = $time = $lat = $lon = $details = $photo = "";
@@ -57,11 +43,14 @@
 	  // Incident Select
 	  if (empty($_POST["incident"])) {
 		$incidentErr = "* Please select the incident";
+		$allOK = false;
 	  } else {
 		$incidentErr = validateIncident($_POST['incident']);
 		if ($incidentErr == "") {
 			$incident = test_input($_POST['incident']);
 			$incidentC = $incident;
+		} else {
+			$allOK = false;
 		}
 	  }
 	 
@@ -69,11 +58,14 @@
 	  // Date Select
 	  if (empty($_POST["date"])) {
 		$dateErr = "* Please select the date";
+		$allOK = false;
 	  } else {
 		$dateErr = validateDate($_POST['date']);
 		if ($dateErr == "") {
 			$date = test_input($_POST["date"]);
 			$dateC = $date;
+		} else {
+			$allOK = false;
 		}
 	  }
 	
@@ -85,25 +77,139 @@
 		if ($timeErr == "") {
 			$time = test_input($_POST["time"]);
 			$timeC = $time;
+		} else {
+			$allOK = false;
 		}
 	  }
-	  $lat = test_input($_POST["latForm"]);
-	  $lon = test_input($_POST["lonForm"]);
+	  $lat = test_input($_POST["lat"]);
+	  $lon = test_input($_POST["lon"]);
 
-	  $details = test_input($_POST["detailsForm"]);
+	  
+	  if (!empty($_POST['details'])) { 
+	  	  $details = test_input($_POST["details"]);
+		  $detailsC = $details;
+	  }
 	
 	  // Photo Upload
-	  if (empty($_POST["photo"])) {
-		$photoErr = "* Please select a photo upload option";
+	  $photoCheck = new checkPhoto("fileToUpload");
+	  if ($photoCheck->uploadOk != 1) {
+	  	$photoErr = $photoCheck->err;
+		$allOK = false;
 	  } else {
-		echo test_input($_POST["photo"]);
-		$photo = test_input($_POST["photo"]);
-	  }
+		$photoC = $photoCheck->name;
+		if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $photoCheck->saveFName)) {
+            //echo $_FILES["fileToUpload"]["tmp_name"];
+			echo $photoCheck->saveFName;
+        	echo "Sorry, there was an error uploading your file. <br><br>";
+			$allOk = false;
+    	}
+	  } 
+	} else {
+		$allOK = false;
 	}
+	if ($allOK) {
+		$servername = "localhost:3306";
+    	$username = "dbBot1";
+    	$password = "kZ66R!E5Cl^eh";
+		$dbName = "admin_";
+	    try {
+       		$conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+       		// set the PDO error mode to exception
+       		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			$dateTime = $conn->quote($date." ".$time);		
+			$sqlQuery = "INSERT INTO `reportData` (`incidentType`, `timestamp`, `lattitude`, `longitude`, `details`, `photoPath`) VALUES (".$conn->quote($incident).", STR_TO_DATE(".$dateTime.",'%Y/%m/%d %H:%i'), ".$conn->quote($lat).", ".$conn->quote($lon).", ".$conn->quote($details).", ".$conn->quote($photoCheck->saveFName).");";
+    		$conn->exec($sqlQuery);
+			header('Location: successfulIncident.html'); 
+			
+		}
+    	catch(PDOException $e)
+       	{
+       		echo "SQL Connection failed: " . $e->getMessage();
+       	}
+		$conn = null;
+	}
+	
+	
+	// A class that validates the photo upload 
+	class checkPhoto {
+		public $target_dir = "uploads/";
+		public $target_file;
+		public $uploadOk = 1;
+		public $imageFileType;
+		public $err = "";
+		public $name;
+		
+		function __construct($inputID) {
+			$this->target_file = $this->target_dir . basename($_FILES[$inputID]["name"]);
+			$this->imageFileType = strtolower(pathinfo($this->target_file,PATHINFO_EXTENSION));
+			$this->name = $_FILES[$inputID]["name"];
 
+			if (!file_exists($this->target_dir)) {
+ 			   mkdir($this->target_dir, 0777, true);
+			}
+			
+			if (!empty($this->name)) {
+				$this->checkRealImage($inputID);
+				if ($this->err == "") {
+					$this->checkFileSize($inputID);
+					if ($this->err == "") {
+						$this->checkFileExtension($inputID);
+					}
+				}
+			} else {
+				$this->uploadOk = 1;
+			}
+			
+			if ($this->uploadOk === 1) {
+				$this->saveFName = $this->getFileName();
+			}
+		}
+		
+		function checkRealImage($inputID) {
+			// Check if image file is a actual image or fake image
+			if(isset($_POST["submit"])) {
+				$check = getimagesize($_FILES[$inputID]["tmp_name"]);
+				if($check === false) {
+					$this->err = "File is not an image.";
+					$this->uploadOk = 0;
+				}
+			}
+		}
+		
+		function checkFileSize($inputID) {
+			// Check file size
+			if ($_FILES[$inputID]["size"] > 1500000) {
+				$this->err = "Sorry, your file is too large.";
+				$uploadOk = 0;
+			}
+		}
+		
+		function checkFileExtension() {
+			if($this->imageFileType != "jpg" &&
+			   $this->imageFileType != "png" &&
+			   $this->imageFileType != "jpeg" &&
+			   $this->imageFileType != "gif" ) {
+				
+				$this->err = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+				$uploadOk = 0;
+			}
+		}
+		
+		function getFileName() {
+			$k = 0;
+			while(!$result){
+				if(!file_exists($this->target_dir."file_".$k.".".$this->imageFileType))
+					$result = $this->target_dir."file_".$k.".".$this->imageFileType;
+				$k++;
+			}
+			return $result;
+		}
+	}
+	
 	function validateIncident($value) {
 		$incidentErr = "";
-		$validVals = array("Littering", "Loitering", "Grafiti",
+		$validVals = array("Littering", "Loitering", "Graffiti",
 						   "Speeding", "Parking");
 		if (! in_array($value, $validVals)) {
 			$incidentErr = "* Please select valid entry from: ";
@@ -186,7 +292,7 @@
 
   <!-- Create the form -->
   <div class="container form">
-    <div class="formRow col-12" style="border: 0;"
+    <div class="formRow col-12"
          onclick="openIncidentSelect()">
       <p class="formTitle">
         Incident Type
@@ -208,17 +314,15 @@
 		<p>
     </div>
     <div class="formRow col-12"
-         onclick="openDetails()">
+         onclick="openDetails()"
+		 onchange="getExtraDetails()">
       <p class="formTitle">Extra Details</p>
       <p class="formSubTitle" id="detailsToChange">Tap to Select<p>
     </div>
-    <div class="formRow col-12" onclick="openPhotoOverlay()">
-      <p class="formTitle">Attach Photo <span class="formErr"><?php echo $photoErr;?></span>
-		</p>
-      <p class="formSubTitle" id="photoToChange">Tap to Select<p>
-    </div>
+	  
+	<!-- The hidden form that gets populated with the entered values via js -->
 	<form method="post" action=""
-		  style="float: right;"> 
+		  style="float: right; width: 100%;" enctype="multipart/form-data"> 
         <select id="incidentForm" style="display: none" name="incident">
 		  <option value=""></option>
           <option value="Littering">0</option>
@@ -228,18 +332,31 @@
           <option value="Parking">4</option>
         </select>
 
-        <textarea id="detailsForm" style="display: none" name="details"></textarea>
-
         <input type="number" id="latForm" step=0.0001 style="display: none" name="lat">
         <input type="number" id="lonForm" step=0.0001 style="display: none" name="lon">
         <input type="text" id="dateForm" style="display: none" name="date">
         <input type="text" id="timeForm" style="display: none" name="time">
-        <input type="file" id="fileForm" style="display: none" name="photo">
-		<div class="col-12 buttonRow" style="display: block; float: right;">
+		<input type="text" id="detailsForm" style="display: none" name="details">
+		
+		<!-- The photo (visible) row -->
+		<div class="formRow col-12" onclick="">
+		  <!--<input type="file" id="photoUser" class="hiddenInput"
+				 accept="image/*" onchange="setPhoto()" name="photoUser"/>		-->
+		  <input type="file" name="fileToUpload" id="fileToUpload" class="hiddenInput"
+				 onchange="setPhoto()">
+		  <p class="formTitle">Add Photo </p>
+		  <p class="formSubTitle" id="photoToChange">Tap to Select<span class="formErr"><?php echo $photoErr;?></span>
+			</p><p>
+		</div>
+		
+		<div class="col-12 buttonRow">
       		<button type="submit" name="submit" value="Submit"
 					class="btn btn-success"
-					style="display: block;">Submit</button>
+					style="display: block; float: right;">Submit</button>
     	</div>
+		
+		
+		 
     </form>
   </div>
 
@@ -295,22 +412,7 @@
      </div>
   </div>
 
-  <!-- The extra details part -->
-  <div id="overlayPhoto" class="overlayBoxSmall">
-    <button class="formBoxes takePhoto" style="height: 50%;"
-         onclick="">
-      <p class="formTitle" style="height: 50%;">
-        <i class="material-icons">camera_alt</i> Take Photo
-      </p>
-    </button>
-    <input type="file" class="hiddenInput takePhoto" style="height: 50%; top: 50%;"
-         onclick="">
-    <div class="formBoxes" style="height: 50%;">
-      <p class="formTitle">
-        <i class="material-icons">collections</i> Upload from device
-      </p>
-    </div>
-  </div>
+
 
 
   <script>
@@ -320,22 +422,31 @@
   </script>
   <script>
     var dateDiv = document.getElementById("datePicker");
+	var d = new Date();
     dateDiv.flatpickr({
       enableTime: false,
-      dateFormat: "Y/m/d"
+      dateFormat: "Y/m/d",
+	  maxDate: d,
     });
 	  
     var timDiv = document.getElementById("timePicker");
+	const h = d.getHours();
+	const m = d.getMinutes();
     timDiv.flatpickr({
-    enableTime: true,
-    noCalendar: true,
-    time_24hr: true,
-    dateFormat: "H:i",
+		enableTime: true,
+		time_24hr: true,
+		noCalendar: true,
+		time_24hr: true,
+		dateFormat: "H:i",
+		enableSeconds: false,
+		minuteIncrement: 15,
+		defaultHour: h,
+		defaultMinute: m,
 	});
 	  
 	const changers = ['incidentToChange', 'dateToChange', 'timeToChange', 'detailsToChange', 
 					  'photoToChange'];
-	const formSet = ['incidentForm', 'dateForm', 'timeForm', 'detailsForm', 'fileForm'];
+	const formSet = ['incidentForm', 'dateForm', 'timeForm', 'detailsForm', 'fileToUpload'];
 	const changeTo = ["<?php echo $incidentC; ?>", "<?php echo $dateC; ?>",
 					  "<?php echo $timeC; ?>", "<?php echo $detailsC; ?>",
 					  "<?php echo $photoC; ?>"];

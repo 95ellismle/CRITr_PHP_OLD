@@ -62,7 +62,6 @@ html {
   bottom: 0;
   background-color: rgba(0,0,0,0);
   z-index: 2;
-  cursor: pointer;
 }
 #overlayBtn {
   position: fixed;
@@ -176,18 +175,23 @@ html {
   float: left;
   height: 90%;
   width: 100%;
+  /*overflow-y: scroll;*/
 }
 .formRow {
   width:100%;
   height: 15%;
   text-align: left;
+  float: left;
   /* border: 1px solid #bfbfbf; */
   /* box-shadow: 0 0 1px rgba(0, 0, 0, 0.6); */
   display: block;
   margin: 0;
+  overflow: hidden;
+  margin-bottom: 2%;
 }
 .formRow:hover {
   background-color: #dfdfdf;
+  cursor: pointer;
 }
 .formTitle {
   text-align: left;
@@ -251,6 +255,8 @@ html {
   display: block;
   /* border: 1px solid #efefef; */
   margin: 0;
+  overflow: hidden;
+  cursor: pointer;
 }
 .fillSpace {
   width: 100%;
@@ -284,6 +290,7 @@ html {
   position: absolute;
   top: 0;
   z-index: 2;
+  cursor: pointer;
   /* color: white; */
 }
 .takePhoto:hover {
@@ -295,6 +302,10 @@ html {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.0);
   border: 0;
   border-bottom: 1px solid black;
+}
+.formErr {
+	color: red;
+	float: right;
 }
 
 /* ESRI Styling */

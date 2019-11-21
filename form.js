@@ -11,9 +11,14 @@ function closeOverlay() {
   document.getElementById("grayOverlay").style.display = "none";
   document.getElementById("overlayDetails").style.display = "none";
   document.getElementById("overlayIncident").style.display = "none";
-  document.getElementById("overlayPhoto").style.display = "none";
-
+	
   getExtraDetails();
+}
+
+function setPhoto() {
+	var file = document.getElementById("fileToUpload");
+	document.getElementById("photoToChange").innerHTML = file.files[0]['name'];
+	closeOverlay();
 }
 
 function openPhotoOverlay() {
@@ -25,7 +30,7 @@ function setDate() {
    const date = document.getElementById("datePicker").value;
    document.getElementById("dateToChange").innerHTML = date;
    var form = document.getElementById("dateForm");
-   form.value = date
+   form.value = date;
 }
 
 function setTime() {
@@ -48,6 +53,7 @@ function selectIncident(incident) {
 function getExtraDetails() {
   var user = document.getElementById("detailsUser");
   var form = document.getElementById("detailsForm");
+  document.getElementById("detailsToChange").innerHTML = user.value;
   form.value = user.value;
 }
 
