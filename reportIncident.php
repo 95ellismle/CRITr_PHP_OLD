@@ -32,14 +32,14 @@
 
 
 <body>
-  <?php
+ <?php
 	// define variables and set to empty values
 	$allOK = true;
 	$incidentErr = $dateErr = $timeErr = $latErr = $lonErr = $detailsErr = $photoErr = "";
 	$incidentC = $dateC = $timeC = $latC = $lonC = $detailsC = $photoC = "Tap To Select";
 	$incident = $date = $time = $lat = $lon = $details = $photo = "";
+
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	
 	  // Incident Select
 	  if (empty($_POST["incident"])) {
 		$incidentErr = "* Please select the incident";
@@ -83,6 +83,8 @@
 	  }
 	  $lat = test_input($_POST["lat"]);
 	  $lon = test_input($_POST["lon"]);
+	  $x = test_input($_POST["xCrd"]);
+	  $y = test_input($_POST["yCrd"]);
 
 	  
 	  if (!empty($_POST['details'])) { 
@@ -91,11 +93,11 @@
 	  }
 	
 	  // Photo Upload
-	  $photoCheck = new checkPhoto("fileToUpload");
-	  if ($photoCheck->uploadOk != 1) {
+	  $photoCheck = new checkPhoto("fileToUpload"); 
+	  if ($photoCheck->uploadOk === 0) {
 	  	$photoErr = $photoCheck->err;
 		$allOK = false;
-	  } else {
+	  } elseif ($photoCheck->uploadOk === 1) {
 		$photoC = $photoCheck->name;
 		if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $photoCheck->saveFName)) {
             //echo $_FILES["fileToUpload"]["tmp_name"];
@@ -103,7 +105,7 @@
         	echo "Sorry, there was an error uploading your file. <br><br>";
 			$allOk = false;
     	}
-	  } 
+	  }
 	} else {
 		$allOK = false;
 	}
@@ -117,8 +119,19 @@
        		// set the PDO error mode to exception
        		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			$dateTime = $conn->quote($date." ".$time);		
-			$sqlQuery = "INSERT INTO `reportData` (`incidentType`, `timestamp`, `lattitude`, `longitude`, `details`, `photoPath`) VALUES (".$conn->quote($incident).", STR_TO_DATE(".$dateTime.",'%Y/%m/%d %H:%i'), ".$conn->quote($lat).", ".$conn->quote($lon).", ".$conn->quote($details).", ".$conn->quote($photoCheck->saveFName).");";
+			$dateTime = $conn->quote($date." ".$time);
+			console.log($conn->prepare($incident));
+			$sqlQuery = "INSERT INTO `reportData` (`incidentType`, `timestamp`, `lattitude`, `longitude`, `details`, `photoPath`, `x`, `y`)
+			VALUES (".$conn->quote(incident).",
+			STR_TO_DATE(".$dateTime.",'%Y/%m/%d %H:%i'),
+			".$conn->quote($lat).",
+			".$conn->quote($lon).",
+			".$conn->quote($details).",
+			".$conn->quote($photoCheck->saveFName).",
+			".$conn->quote($x).",
+			".$conn->quote($y).");";
+			
+			console.log($sqlQuery);
     		$conn->exec($sqlQuery);
 			header('Location: successfulIncident.html'); 
 			
@@ -158,7 +171,7 @@
 					}
 				}
 			} else {
-				$this->uploadOk = 1;
+				$this->uploadOk = 2;
 			}
 			
 			if ($this->uploadOk === 1) {
@@ -323,7 +336,7 @@
 	<!-- The hidden form that gets populated with the entered values via js -->
 	<form method="post" action=""
 		  style="float: right; width: 100%;" enctype="multipart/form-data"> 
-        <select id="incidentForm" style="display: none" name="incident">
+        <select id="incidentForm" style="display: none;" name="incident">
 		  <option value=""></option>
           <option value="Littering">0</option>
           <option value="Loitering">1</option>
@@ -332,11 +345,14 @@
           <option value="Parking">4</option>
         </select>
 
-        <input type="number" id="latForm" step=0.0001 style="display: none" name="lat">
-        <input type="number" id="lonForm" step=0.0001 style="display: none" name="lon">
-        <input type="text" id="dateForm" style="display: none" name="date">
-        <input type="text" id="timeForm" style="display: none" name="time">
-		<input type="text" id="detailsForm" style="display: none" name="details">
+        <input type="number" id="latForm" step=0.0000001 style="display: none" name="lat">
+        <input type="number" id="lonForm" step=0.0000001 style="display: none" name="lon">
+		<input type="number" id="xForm" step=0.0000001 style="display: none;" name="xCrd">
+        <input type="number" id="yForm" step=0.0000001 style="display: none;" name="yCrd">
+
+        <input type="text" id="dateForm" style="display: none;" name="date">
+        <input type="text" id="timeForm" style="display: none;" name="time">
+		<input type="text" id="detailsForm" style="display: none;" name="details">
 		
 		<!-- The photo (visible) row -->
 		<div class="formRow col-12" onclick="">
@@ -419,6 +435,8 @@
     var coords = JSON.parse(window.localStorage.getItem("coords"));
     document.getElementById("latForm").value = coords['lat'];
     document.getElementById("lonForm").value = coords['lon'];
+    document.getElementById("xForm").value = coords['x'];
+    document.getElementById("yForm").value = coords['y'];
   </script>
   <script>
     var dateDiv = document.getElementById("datePicker");
