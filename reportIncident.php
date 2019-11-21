@@ -1,7 +1,8 @@
-<html>
+<!DOCTYPE html>
+
+<html lang="en-GB">
 
 <head>
-  <meta content="text/html" charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>CRITr</title>
 
@@ -38,8 +39,8 @@
 	$incidentErr = $dateErr = $timeErr = $latErr = $lonErr = $detailsErr = $photoErr = "";
 	$incidentC = $dateC = $timeC = $latC = $lonC = $detailsC = $photoC = "Tap To Select";
 	$incident = $date = $time = $lat = $lon = $details = $photo = "";
+
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	
 	  // Incident Select
 	  if (empty($_POST["incident"])) {
 		$incidentErr = "* Please select the incident";
@@ -83,6 +84,8 @@
 	  }
 	  $lat = test_input($_POST["lat"]);
 	  $lon = test_input($_POST["lon"]);
+	  $x = test_input($_POST["x"]);
+	  $y = test_input($_POST["y"]);
 
 	  
 	  if (!empty($_POST['details'])) { 
@@ -91,11 +94,11 @@
 	  }
 	
 	  // Photo Upload
-	  $photoCheck = new checkPhoto("fileToUpload");
-	  if ($photoCheck->uploadOk != 1) {
+	  $photoCheck = new checkPhoto("fileToUpload"); 
+	  if ($photoCheck->uploadOk === 0) {
 	  	$photoErr = $photoCheck->err;
 		$allOK = false;
-	  } else {
+	  } elseif ($photoCheck->uploadOk === 1) {
 		$photoC = $photoCheck->name;
 		if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $photoCheck->saveFName)) {
             //echo $_FILES["fileToUpload"]["tmp_name"];
@@ -103,7 +106,7 @@
         	echo "Sorry, there was an error uploading your file. <br><br>";
 			$allOk = false;
     	}
-	  } 
+	  }
 	} else {
 		$allOK = false;
 	}
@@ -117,8 +120,19 @@
        		// set the PDO error mode to exception
        		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			$dateTime = $conn->quote($date." ".$time);		
-			$sqlQuery = "INSERT INTO `reportData` (`incidentType`, `timestamp`, `lattitude`, `longitude`, `details`, `photoPath`) VALUES (".$conn->quote($incident).", STR_TO_DATE(".$dateTime.",'%Y/%m/%d %H:%i'), ".$conn->quote($lat).", ".$conn->quote($lon).", ".$conn->quote($details).", ".$conn->quote($photoCheck->saveFName).");";
+			$dateTime = $conn->quote($date." ".$time);
+			console.log($conn->prepare($incident));
+			$sqlQuery = "INSERT INTO `reportData` (`incidentType`, `timestamp`, `lattitude`, `longitude`, `details`, `photoPath`, `x`, `y`)
+			VALUES (".$conn->quote(incident).",
+			STR_TO_DATE(".$dateTime.",'%Y/%m/%d %H:%i'),
+			".$conn->quote($lat).",
+			".$conn->quote($lon).",
+			".$conn->quote($details).",
+			".$conn->quote($photoCheck->saveFName).",
+			".$conn->quote($x).",
+			".$conn->quote($y).");";
+			
+			console.log($sqlQuery);
     		$conn->exec($sqlQuery);
 			header('Location: successfulIncident.html'); 
 			
@@ -158,7 +172,7 @@
 					}
 				}
 			} else {
-				$this->uploadOk = 1;
+				$this->uploadOk = 2;
 			}
 			
 			if ($this->uploadOk === 1) {
@@ -280,7 +294,7 @@
         <i class="material-icons">arrow_back</i>
       </button>
     </div>
-    <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
+    <div style="width: 75%; display: inline-block; height:100%; vertical-align: middle">
       <p  class="titleReportTxt">
         &nbsp; Report Incident
       </p>
@@ -291,7 +305,7 @@
   </div>
 
   <!-- Create the form -->
-  <div class="container form">
+  <div class="form container">
     <div class="formRow col-12"
          onclick="openIncidentSelect()">
       <p class="formTitle">
@@ -321,10 +335,10 @@
     </div>
 	  
 	<!-- The hidden form that gets populated with the entered values via js -->
-	<form method="post" action=""
-		  style="float: right; width: 100%;" enctype="multipart/form-data"> 
+	<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+		  style="float: right; width: 100%;"> 
         <select id="incidentForm" style="display: none" name="incident">
-		  <option value=""></option>
+		  <option value="">default</option>
           <option value="Littering">0</option>
           <option value="Loitering">1</option>
           <option value="Graffiti">2</option>
@@ -332,8 +346,10 @@
           <option value="Parking">4</option>
         </select>
 
-        <input type="number" id="latForm" step=0.0001 style="display: none" name="lat">
-        <input type="number" id="lonForm" step=0.0001 style="display: none" name="lon">
+        <input type="number" id="latForm" step=0.000001 style="display: none" name="lat">
+        <input type="number" id="lonForm" step=0.000001 style="display: none" name="lon">
+        <input type="number" id="xForm" step=0.000001 style="display: none" name="x">
+        <input type="number" id="yForm" step=0.000001 style="display: none" name="y">
         <input type="text" id="dateForm" style="display: none" name="date">
         <input type="text" id="timeForm" style="display: none" name="time">
 		<input type="text" id="detailsForm" style="display: none" name="details">
@@ -348,15 +364,9 @@
 		  <p class="formSubTitle" id="photoToChange">Tap to Select<span class="formErr"><?php echo $photoErr;?></span>
 			</p><p>
 		</div>
-		
-		<div class="col-12 buttonRow">
-      		<button type="submit" name="submit" value="Submit"
-					class="btn btn-success"
-					style="display: block; float: right;">Submit</button>
-    	</div>
-		
-		
-		 
+		<button type="submit" name="submit" value="Submit"
+		    	class="btn btn-success"
+				style="display: block; float: right; cursor:pointer;">Submit</button>
     </form>
   </div>
 
@@ -364,6 +374,8 @@
   <!-- The incident type overlay -->
   <div id="grayOverlay" onclick="closeOverlay()">
   </div>
+
+  <!-- The incident overlay -->
   <div class="overlayBox" id="overlayIncident">
     <div class="container">
       <h2>&nbsp; Incident Type</h2>
@@ -419,8 +431,10 @@
     var coords = JSON.parse(window.localStorage.getItem("coords"));
     document.getElementById("latForm").value = coords['lat'];
     document.getElementById("lonForm").value = coords['lon'];
+    document.getElementById("xForm").value = coords['x'];
+    document.getElementById("yForm").value = coords['y'];
   </script>
-  <script>
+  <script>	  
     var dateDiv = document.getElementById("datePicker");
 	var d = new Date();
     dateDiv.flatpickr({
