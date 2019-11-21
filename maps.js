@@ -1,6 +1,31 @@
+function printLatLons(latLons){
+	console.log(latLons);
+}
+
+function getLatLon(view) {
+	console.log(view.center.latitude);
+	console.log(view.center.longitude);
+
+	$.ajax({
+		url: 'getLatLon.php',
+		dataType: 'json',
+		type: 'post',
+		contentType: 'application/x-www-form-urlencoded',
+		data: [0.2, 0.1],
+		success: function(latlons){
+			printLatLons(latlons);
+		},
+		error: function( jqXhr, textStatus, errorThrown ){
+			console.log( errorThrown );
+		}
+	});
+}
+
+
 function cancelCreate(){};
 function submitReport(){};
 
+var viewGlobal;
 require([
     // The map
     "esri/Map",
@@ -13,10 +38,13 @@ require([
     "esri/Graphic",
   "esri/layers/GraphicsLayer",
   "esri/widgets/Sketch/SketchViewModel",
+  "esri/geometry/Extent",
+  "esri/widgets/CoordinateConversion"
   ],
 
   function(Map, MapView, Locate, Graphic,
-           GraphicsLayer, SketchViewModel) {
+           GraphicsLayer, SketchViewModel,
+		   CoordinateConversion, Extent) {
 
     let editGraphic;
 
@@ -67,10 +95,10 @@ require([
     function updateCoords(evt) {
       pt = view.toMap({ x: evt.x, y: evt.y });
 
-      coords = {"lat": pt.latitude.toFixed(3),
-                "lon": pt.longitude.toFixed(3),
-                "x": event.x,
-                "y": event.y};
+      coords = {"lat": pt.latitude.toFixed(5),
+                "lon": pt.longitude.toFixed(5),
+                "x": event.x.toFixed(5),
+                "y": event.y.toFixed(5)};
     }
 
     // logic for handling the creation of pins
@@ -111,7 +139,33 @@ require([
     }
 
     });
+	
+	view.on("layerview-create", function(){
+		var xmin = view.extent.xmin;
+		var xmax = view.extent.xmax;
+		var ymax = view.extent.ymax;
+		var ymin = view.extent.ymin;
+	});
+	
 
+  // Will add a widget to zoom into the user
+    var locate = new Locate({
+      view: view,
+      useHeadingEnabled: false,
+      goToOverride: function(view, options) {
+        options.target.scale = 1000;  // Override the default map scale
+        return view.goTo(options.target);
+      }
+    });
+
+    view.ui.add(locate, "top-left");
+	viewGlobal = view;
+});
+
+
+
+/*
+  
     // // Set the toggle between satelite and standard map
     // var basemapToggle = new BasemapToggle({
     //   view: view,
@@ -119,19 +173,6 @@ require([
     // });
     // view.ui.add(basemapToggle,"bottom-right");
 
-
-  // Will add a widget to zoom into the user
-    var locate = new Locate({
-      view: view,
-      useHeadingEnabled: false,
-      goToOverride: function(view, options) {
-        options.target.scale = 1500;  // Override the default map scale
-        return view.goTo(options.target);
-      }
-    });
-
-    view.ui.add(locate, "top-left");
-  /*
     // Will show the lattitude and longitude of the cursor
     var coordsWidget = document.createElement("div");
     coordsWidget.id = "coordsWidget";
@@ -155,4 +196,3 @@ require([
       showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
     });
   */
-});
