@@ -25,7 +25,9 @@
 
   <!-- My Scripts -->
   <script src="cards.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="maps.js" type="text/javascript"></script>
+  
 </head>
 
 
@@ -35,21 +37,21 @@
     <!-- Reporting incident navbar -->
     <div id="reportIncidentBar">
       <div class="titleReportTxt"
-           style="float: left; width: 15%; display: inline-block">
+           style="float: left; width: 10%; display: inline-block">
         <button class="backBtn"
                 onclick="cancelCreate()">
-          <i class="material-icons">arrow_back</i>
+          <i class="material-icons" class="btnIcon">arrow_back</i>
         </button>
       </div>
       <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
         <p  class="titleReportTxt">
           &nbsp; Select Incident Location
         </p>
-        <p>
+        <p style="font-size:2.5vh;">
           &nbsp; (Tap to select a location)
         </p>
       </div>
-      <div id='submitReportBtn' style="float: right; width: 10%; display: none;">
+      <div id='submitReportBtn' style="float: right; width: 15%; display: none;">
         <button class="backBtn"
                 onclick="submitReport()">
           OK
@@ -59,29 +61,29 @@
 
     <!-- ESRI Maps Stuff -->
     <div id="viewDiv">
-  		<div id="topbar">
-      		<button class="action-button" id="pointButton"
-      			      type="button" title="Report Incident"
-                  style="align: center;">
-                  <i class="material-icons">add</i>
-          </button>
+  		<div id="topbar" style="background-color: rgba(0,0,0,0);">
+			<button class="action-button" id="pointButton"
+					type="button" title="Report Incident"
+					style="align: center;">
+				<i class="material-icons" style="font-size: 50px;">add</i>
+			</button>
     	</div>
+		<div id="overlayBtn"
+			 style="position: absolute: bottom:0; left:5%; display: block; width: 90%;">
+			<button class="action-button" id="activitiesBtn"
+					type="button" title="Report Incident" style="width: 30%; height: 50px; margin-left: 35%;"
+					onclick="showCards()"><i class="material-icons" style="font-size: 50px;">keyboard_arrow_up</i></button>
+		</div>
     </div>
 
 <!-- Start the card interface -->
-<div id="overlayCards">
+<div id="overlayCards" style="display: none;">
   <div class="hideScroll container-fluid card-block">
       <div id="cardRow" class="row flex-nowrap card-block">
       </div>
   </div>
 </div>
-<div id="overlayBtn">
-  <button class="action-button" id="activitiesBtn"
-          type="button" title="Report Incident"
-          style="align: center;" onclick="showCards()">
-          <i class="material-icons">keyboard_arrow_up</i>
-  </button>
-</div>
+	
 <script>
     activities = getActivities();
     // Loop over all activities and add them to the screen
@@ -100,3 +102,4 @@
 
 </body>
 </html>
+

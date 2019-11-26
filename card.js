@@ -4,6 +4,18 @@ function showCards() {
     document.getElementById("overlayCards").style.display = "flex";
 }
 
+// Will hide the cards overlay
+function hideCards() {
+    document.getElementById("overlayBtn").style.display = "flex";
+    document.getElementById("overlayCards").style.display = "none";
+}
+
+// Will hide the activities button
+function hideActButton() {
+	document.getElementById("overlayBtn").style.display = "none";
+    document.getElementById("overlayCards").style.display = "none";
+}	
+
 // Will show remove the topBar for the user and go back to how the first screen was
 function backToFullMap() {
   showCards();
@@ -74,93 +86,122 @@ function getActivities() {
 
 // Will create the overlay cards
 function createCardOverlay(dict, i) {
-  var parentDiv = document.createElement("div");
-  parentDiv.id = "card_" + i.toString();
-  parentDiv.className = "col-11 col-sm-7 col-md-5 col-lg-3";
+    var parentDiv = document.createElement("div");
+    parentDiv.id = "card_" + i.toString();
+    parentDiv.className = "col-11 col-sm-7 col-md-5 col-lg-3";
 
-  var cardDiv = document.createElement("div");
-  cardDiv.className = "container card card-block";
-  var cardTop = document.createElement("div");
-  cardTop.className = "cardTop";
+    var cardDiv = document.createElement("div");
+    cardDiv.className = "container card card-block";
+    var cardTop = document.createElement("div");
+    cardTop.className = "cardTop";
 
-  // Create Title
-  var cardLeft = document.createElement("div");
-  cardLeft.className = "colLeft";
-  var title = document.createElement("h5");
-  title.innerHTML = dict['title'];
-  cardLeft.appendChild(title);
-  cardTop.appendChild(cardLeft);
+    // Create Title
+    var cardLeft = document.createElement("div");
+    cardLeft.className = "colLeft";
+    var title = document.createElement("h5");
+    title.innerHTML = dict['title'];
+    cardLeft.appendChild(title);
+    cardTop.appendChild(cardLeft);
 
-  // Create num people
-  var cardRight = document.createElement("div");
-  cardRight.className = "colRight";
-  var people = document.createElement("h5");
-  for (var i=0; i<dict['spacesTaken']; i++) {
-      icon = document.createElement("i");
-      icon.className = "material-icons";
-      icon.innerHTML = "person";
-      icon.style.fontSize = "17px";
-      people.appendChild(icon);
-  }
-  for (var i=0; i<(dict['numPeople'] - dict['spacesTaken']); i++) {
-      icon = document.createElement("i");
-      icon.className = "material-icons";
-      icon.innerHTML = "person_outline";
-      icon.style.fontSize = "17px";
-      people.appendChild(icon);
-  }
-  cardRight.appendChild(people);
-  cardTop.appendChild(cardRight);
-  cardDiv.appendChild(cardTop);
+    // Create num people
+    var cardRight = document.createElement("div");
+    cardRight.className = "colRight";
+    var people = document.createElement("h5");
+    for (var i=0; i<dict['spacesTaken']; i++) {
+        icon = document.createElement("i");
+        icon.className = "material-icons";
+        icon.innerHTML = "person";
+        icon.style.fontSize = "17px";
+        people.appendChild(icon);
+    }
+    for (var i=0; i<(dict['numPeople'] - dict['spacesTaken']); i++) {
+        icon = document.createElement("i");
+        icon.className = "material-icons";
+        icon.innerHTML = "person_outline";
+        icon.style.fontSize = "17px";
+        people.appendChild(icon);
+    }
+    cardRight.appendChild(people);
+    cardTop.appendChild(cardRight);
+    cardDiv.appendChild(cardTop);
 
-  // Add the address
-  var cardMiddle = document.createElement("div");
-  cardMiddle.className = "cardMiddle";
-  var cardLeft = document.createElement("div");
-  cardLeft.className = "colLeft";
-  var spanAddress = document.createElement("span");
-  spanAddress.className = "cardWhere";
-  spanAddress.innerHTML = dict['location'];
-  cardLeft.appendChild(spanAddress);
-  cardMiddle.appendChild(cardLeft);
-  // Add the time
-  // var cardLeft = document.createElement("div");
-  // cardLeft.className = "colLeft";
-  var span = document.createElement("span");
-  span.className = "cardWhere";
-  span.innerHTML = dict['date'] + " " + dict['time']
-  cardLeft.appendChild(span);
-  cardMiddle.appendChild(cardLeft);
+    // Created the title now create the rest
+    //////////////////////////////////////////
 
-  // Add the picture
-  var cardRight = document.createElement("div");
-  cardRight.className = "colRight";
-  var img = document.createElement("img");
-  img.src = dict['imageLocation'];
-  img.className = "evtImg";
-  cardRight.appendChild(img);
-  cardMiddle.appendChild(cardRight);
-  cardDiv.appendChild(cardMiddle);
+    // Create the address
+    var spanAddress = document.createElement("span");
+    spanAddress.className = "cardWhere";
+    spanAddress.innerHTML = dict['location'];
 
+    // Create the time
+    var spanTime = document.createElement("span");
+    spanTime.className = "cardWhere";
+    spanTime.innerHTML = dict['date'] + " " + dict['time']
 
-  // Add the commit button
-  var cardBottom = document.createElement("div");
-  var btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "btn-sm btn-primary";
-  btn.innerHTML = "Commit";
-  cardBottom.appendChild(btn);
+    // Create the picture
+    var picture = document.createElement("picture");
+  	var source = document.createElement("source");
+  	var img = document.createElement("img");
+  	source.srcset = dict['imageLocation'];
+  	source.media = "(min-height: 550px), (min-width: 50rem)";
+  	img.src = "";
+  	picture.className = "evtImg";
+  	source.className = "evtImg";
+  	img.className = "evtImg";
+  	picture.appendChild(source);
+  	picture.appendChild(img);
 
-  var span = document.createElement("span");
-  span.className = "cardPts";
-  span.innerHTML = "+ " + dict['points'].toString() + " pts";
-  cardBottom.appendChild(span);
+    // Create the commit button
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn-sm btn-primary";
+    btn.innerHTML = "Commit";
 
-  cardDiv.appendChild(cardBottom);
+    // Create the points
+    var spanPts = document.createElement("span");
+    spanPts.className = "cardPts";
+    spanPts.innerHTML = "+ " + dict['points'].toString() + " pts";
 
 
-  parentDiv.appendChild(cardDiv);
-  return parentDiv;
+    // Now create the divs to position things
+    var cardDetailsBit = document.createElement("div");
+    cardDetailsBit.className = "cardBottom";
+
+    var cardLeft = document.createElement("div");
+    cardLeft.className = "colLeft";
+    cardLeft.style.height = '100%';
+    cardLeft.style.width = "60%";
+    var cardLeftTop = document.createElement("div");
+    cardLeftTop.className = "";
+    cardLeftTop.style.height = '70%';
+    var cardLeftBot = document.createElement("div");
+    cardLeftBot.className = "cardBottom";
+    cardLeftBot.style.align = "bottom";
+    cardLeftBot.style.height = '30%';
+
+    var cardRight = document.createElement("div");
+    cardRight.className = "colRight";
+    cardRight.style.width = "40%";
+
+    cardLeftTop.appendChild(spanAddress);
+    cardLeftTop.appendChild(spanTime);
+
+    cardLeftBot.appendChild(btn);
+    cardLeftBot.appendChild(spanPts);
+
+    cardLeft.appendChild(cardLeftTop);
+    cardLeft.appendChild(cardLeftBot);
+
+    cardRight.appendChild(picture);
+
+    cardDetailsBit.appendChild(cardLeft);
+    cardDetailsBit.appendChild(cardRight);
+
+    cardDiv.appendChild(cardDetailsBit);
+
+
+    parentDiv.appendChild(cardDiv);
+    return parentDiv;
 }
 
 
@@ -189,7 +230,7 @@ function createCard(dict, i) {
     var colDiv2_1 = document.createElement("div");
     colDiv2_1.className = "col-xs-3";
 
-    // Add the date
+    // Create the date
     var dateStr = document.createElement("p");
     dateStr.className = "cardDate";
     dateStr.innerHTML = dict['date'].slice(0, 3);
@@ -199,7 +240,7 @@ function createCard(dict, i) {
     var colDiv3_1 = document.createElement("div");
     colDiv3_1.className = "col-xs-3";
 
-    // Add the time
+    // Create the time
     var timeStr = document.createElement("p");
     timeStr.className = "cardTime";
     timeStr.innerHTML = dict['time'];
@@ -262,3 +303,4 @@ function createCard(dict, i) {
 
     return cardDiv;
 }
+
