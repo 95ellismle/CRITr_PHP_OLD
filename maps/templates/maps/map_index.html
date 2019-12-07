@@ -1,0 +1,144 @@
+{% extends 'maps/base.html' %}
+
+
+{% block content %}
+  <!-- <script>
+     var reportIncidentPage="{% url 'reportIncident' %}";
+     console.log(reportIncidentPage);
+  </script> -->
+
+ <!-- Reporting incident navbar -->
+  <div id="reportIncidentBar">
+      <div class="titleReportTxt"
+           style="float: left; width: 10%; display: inline-block; height:100%">
+          <button class="backBtn"
+                  onclick="cancelCreate()">
+              <i class="material-icons" class="btnIcon">arrow_back</i>
+          </button>
+      </div>
+      <div style="width: 75%; display: inline-block; height:100%; vertical-align: 'middle'">
+          <p  class="titleReportTxt">
+              &nbsp; Select Incident Location
+          </p>
+          <p class="subTitle">
+              &nbsp; (Tap to select a location)
+          </p>
+      </div>
+      <div id='submitReportBtn' style="float: right; width: 15%; display: none; height: 100%">
+          <button class="backBtn"
+                  onclick="submitReport()">
+              OK
+          </button>
+      </div>
+  </div>
+
+  <!-- ESRI Maps Stuff -->
+  <div id="viewDiv">
+      <div id="topbar" style="background-color: rgba(0,0,0,0);">
+          <button class="action-button" id="pointButton"
+                  type="button" title="Report Incident"
+                  style="align: center;">
+              <i class="material-icons" style="font-size: 50px;">add</i>
+          </button>
+      </div>
+      <div id="overlayBtn"
+           style="position: absolute: bottom:0; left:5%; display: block; width: 90%;">
+          <button class="action-button" id="activitiesBtn"
+                  type="button" title="Report Incident" style="width: 30%; height: 50px; margin-left: 35%;"
+                  onclick="showCards()"><i class="material-icons" style="font-size: 50px;">keyboard_arrow_up</i></button>
+      </div>
+  </div>
+
+  <!-- Start the card interface -->
+  <div id="overlayCards" style="display: none;">
+      <div class="hideScroll container-fluid card-block">
+          <div id="cardRow" class="row flex-nowrap card-block">
+          </div>
+      </div>
+  </div>
+
+<!--
+  <div style="position: absolute; top:50%; left: 50%; z-index: 10">
+      <p id="testOut">BOB</p>
+  </div>
+-->
+
+  <script>
+      activities = getActivities();
+      // Loop over all activities and add them to the screen
+      var len = activities.length;
+      if (len > 10) {
+          len = 10;
+      }
+      for (var i=0; i<activities.length; i++) {
+          currDict = activities[i];
+          var cardRow = document.getElementById("cardRow");
+
+          var cardDiv = createCardOverlay(currDict, i);
+          cardRow.appendChild(cardDiv);
+      }
+
+      function getWidth()
+      {
+          xWidth = null;
+          if(window.screen != null)
+              xWidth = window.screen.availWidth;
+
+
+          if(window.innerWidth != null)
+              xWidth = window.innerWidth;
+
+          if(document.body != null)
+              xWidth = document.body.clientWidth;
+
+          return xWidth;
+      }
+      function getHeight() {
+          xHeight = null;
+          if(window.screen != null)
+              xHeight = window.screen.availHeight;
+
+          if(window.innerHeight != null)
+              xHeight =   window.innerHeight;
+
+          if(document.body != null)
+              xHeight = document.body.clientHeight;
+
+          return xHeight;
+      }
+      const width = getWidth();
+      const height = getHeight();
+
+      function changeFont(font1, font2) {
+          var cols = document.getElementsByClassName("subTitle");
+          for (var i=0; i<cols.length; i++) {
+              cols[i].style.fontSize = font1;
+          }
+          var cols = document.getElementsByClassName("titleReportTxt");
+          for (var i=0; i<cols.length; i++) {
+              cols[i].style.fontSize = font2;
+          }
+      }
+
+      if ((width < 300) || (height < 471)) {
+          changeFont("12px", "16px");
+      } else if (width < 368 || height < 562) {
+          changeFont("14px", "18px");
+      } else {
+         changeFont("16px", "21px");
+      }
+
+      function openNavBar()
+      {
+          document.getElementById("reportIncidentBar").style.display = "block";
+          document.getElementById("reportIncidentBar").style.height = "10%";
+          document.getElementById("viewDiv").style.height = "90%";
+      }
+
+  </script>
+
+</body>
+
+
+
+{% endblock %}
