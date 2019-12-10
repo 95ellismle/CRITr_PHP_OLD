@@ -244,11 +244,11 @@ require([
 			var mapView = document.getElementById("viewDiv");
 			mapView.style.position = "absolute";
 			mapView.style.bottom = 0;
-			mapView.style.height = "90%";
+			mapView.style.height = "calc(100% - 70px)";
 
 			var topBar = document.getElementById("reportIncidentBar");
 			topBar.style.display = "block";
-			topBar.style.height = "10%";
+			topBar.style.height = "70px";
 		}
 
 		var ymax = view.extent.ymax;
