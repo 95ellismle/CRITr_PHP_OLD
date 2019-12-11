@@ -7,7 +7,7 @@
         <!--=== META TAGS ===-->
         <meta content="text/html" charset="utf-8" />
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-        <title>CRITr</title>
+        <title>{% block title %}CRITr{% endblock %}</title>
         <meta charset="utf-8" />
         <meta name="description" content="A webapp to organise CRITr. Includes mapping functionality, reporting tools and event management.">
         <meta name="author" content="Matt Ellis">
@@ -27,6 +27,9 @@
         <!-- Bootstrap -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        {% block addtionalScripts %}
+        {% endblock %}
 
     </head>
 

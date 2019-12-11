@@ -12,8 +12,8 @@ class Incident(models.Model):
                        ("Parking","Parking"),)
 
     incidentType = models.CharField(max_length=200, choices=incidentChoices)
-    incidentTime = models.TimeField(default="")
-    incidentDate = models.DateField(default="")
+    incidentTime = models.TimeField(default=timezone.now)
+    incidentDate = models.DateField(default=timezone.now)
     latitude = models.FloatField()
     longitude = models.FloatField()
     x = models.FloatField()

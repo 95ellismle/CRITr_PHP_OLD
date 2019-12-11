@@ -1,7 +1,9 @@
 {% extends "maps/base.html" %}
 {% load static %}
 
-{% block content %}
+{% block title %}Report an incident{% endblock %}
+
+{% block addtionalScripts %}
 <style>
   body {
     overflow-y: auto;
@@ -13,6 +15,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
 
   <script src="{% static 'js/forms.js' %}"></script>
+{% endblock %}
+
+{% block content %}
 <!-- Reporting incident navbar -->
 <div id="reportIncidentBar" style="display: block">
     <!-- Back Button -->
@@ -166,7 +171,7 @@
   var d = new Date();
   dateDiv.flatpickr({
     enableTime: false,
-    dateFormat: "d/m/Y",
+    dateFormat: "Y-m-d",
     maxDate: d,
   });
 
