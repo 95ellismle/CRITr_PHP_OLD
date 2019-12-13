@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}CRITr -signup{% endblock %}
+
+{% block additionalScripts %}
+{% endblock %}
+
+{% block content %}
+<div id="loginOverlay" class="boxOverlay">
+	<div style="height: 50%;">
+		<img id="logo" src="{% static 'img/critrLogo.png' %}" width="96%" style="margin: 2%; align: center;">
+	</div>
+
+  <form class="loginForm" style="width: 100%">
+    {% for field in form %}
+		    {% if forloop.counter == 1 %}
+		      <div id="form_{{ forloop.counter }}" style="height: 100px; display: block; width: 100%">
+		    {% else %}
+		      <div id="form_{{ forloop.counter }}" style="height: 100px; display: none; width: 100%">
+		    {% endif %}
+						<!-- <div> -->
+            {{ field.label}}
+            {{ field }}
+						<!-- </div> -->
+
+					  <!-- Add the buttons -->
+		        <!-- Just the next button -->
+		        {% if forloop.counter == 1 %}
+		          <button class="nextBtn btn" id="nxtBtn"
+					  	 				onclick="showDisplay({{ forloop.counter|add:'1' }})">
+		            <i class="material-icons">arrow_forward</i>
+		          </button>
+
+					  	<!-- The next and previous buttons -->
+					  {%  elif forloop.counter < form_len %}
+					  	<button class="prevBtn btn"
+					  				  onclick="showDisplay({{ forloop.counter|add:'-1' }})">
+					  		<i class="material-icons">arrow_backward</i>
+					  	</button>
+					  	<button class="nextBtn btn" id="nxtBtn"
+					  					onclick="showDisplay({{ forloop.counter|add:'1' }})">
+					  		<i class="material-icons">arrow_forward</i>
+					  	</button>
+
+					  <!-- The signup and previous button -->
+					  {% else %}
+					  	<button class="prevBtn btn"
+					  		onclick="showDisplay({{ forloop.counter|add:'-1' }})">
+					  		<i class="material-icons">arrow_backward</i>
+					  	</button>
+					  	<div class="loginFormRow" id="signupBtn">
+					  		<input type="submit" name="login" class="loginBtn" value="Signup">
+					  	</div>
+		        {% endif %}
+
+       		</div>
+    {% endfor %}
+    <!-- {{ form.as_ul }} -->
+      <!-- <div class="loginFormRow">
+				<input type="email" placeholder="Username" name="username" class="loginFormInput">
+			</div>
+			<div class="loginFormRow">
+				<input type="password" placeholder="Password" name="password" class="loginFormInput">
+			</div> -->
+  </form>
+</div>
+{% endblock %}
+
+{% block additionalScriptsFoot %}
+<script type="text/javascript">
+
+		const urls = {'validate_username': '{% url "validate_username" %}'}
+
+		var currentPage = 1;
+		$(document).keypress(function(e){
+		    if (e.which == 13){
+						if (currentPage < {{ form_len }}) {
+								console.log(currentPage);
+		        	  showDisplay(currentPage + 1);
+						}
+						console.log("Enter Pressed!, currPage: "+currentPage.toString());
+		    }
+		});
+
+    function showDisplay(dispInd) {
+			for (var i=1; i<={{form_len}}; i++){
+				$("#form_"+i.toString()).hide();
+			}
+			$("#form_"+dispInd.toString()).style.display('block');
+			currentPage = dispInd;
+
+    }
+
+
+		// Validate a username
+		$("#id_username").change(function() {
+			  var username = $(this).val();
+				// console.log(username);
+
+				$.ajax({
+					url: urls['validate_username'],
+					data: {
+						'username': username
+					},
+					dataType: 'json',
+					sucess: function(data) {
+						console.log("BOB");
+						if (data.is_taken) {
+							alert("This user already exists!");
+						} else {
+							alert("Well done that's not taken!")
+						}
+					}
+				})
+		});
+</script>
+{% endblock %}
