@@ -73,6 +73,14 @@ html {
 	background-color: rgba(0,0,0,0);
 	z-index: 2;
 }
+.overlayAdd {
+	width: 360px;
+	height: 150px;
+	display: block;
+	position: absolute;
+	background-color: white;
+	border: 1px solid #ccc;
+}
 #overlayBtn {
 	position: fixed;
 	top: 90%;
@@ -189,6 +197,7 @@ html {
 	width:85%;
 	/* border: 2px dashed black; */
 	display: block;
+	contain: content;
 }
 .formRow:hover {
 	background-color: #dfdfdf;
@@ -414,11 +423,13 @@ html {
 }
 
 .signinFormField {
-	width: 100%;
+	width: 90%;
+	margin-left: 5%;
 }
 .nextBtn, .prevBtn {
 	float: right;
 	width: 50%;
+	text-align: right;
 	 /* background-color: #FF5609;
 	 border: 0;
 	 height: 35px;
@@ -428,4 +439,49 @@ html {
 }
 .prevBtn {
 	float: left;
+	text-align: left;
+}
+
+/* The password validation */
+.goodFormField {
+	border:2px solid green;
+ -webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+.badFormField {
+	background-color: rgba(1,0,0,0.1);
+}
+.neutralFormField {
+	background-color: #fff;
+}
+/* The message box is shown when the user clicks on the password field */
+#message {
+	display:none;
+	/* background: #f1f1f1; */
+	color: #000;
+	position: relative;
+	padding: 5px;
+	margin-top: 5px;
+}
+#message p {
+	padding: 10px 35px;
+	font-size: 18px;
+}
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+	color: green;
+}
+.valid:before {
+	position: relative;
+	left: -35px;
+	content: "✔";
+}
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+	color: red;
+}
+.invalid:before {
+	position: relative;
+	left: -35px;
+	content: "✖";
 }

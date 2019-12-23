@@ -3,7 +3,7 @@
 
 {% block title %}Report an incident{% endblock %}
 
-{% block addtionalScriptsFoot %}
+{% block additionalScriptsFoot %}
 <style>
   body {
     overflow-y: auto;
@@ -21,7 +21,7 @@
 <!-- Reporting incident navbar -->
 <div id="reportIncidentBar" style="display: block">
     <!-- Back Button -->
-    <a href="{% url 'map_index' %}" style="color: inherit;">
+    <a href="{% url 'maps' %}" style="color: inherit;">
         <div class="navBarElm" style="width: 60px; float: left; display:flex; align-items:center;">
            <i class="material-icons" style="margin-left: 25%;">arrow_back</i>
         </div>
@@ -40,7 +40,7 @@
 
 <!-- Create the form -->
 <div class="form" style="margin-left: 5%; width: 90%;">
-  <div class="formRow col-12"
+  <div class="formRow"
        onclick="openIncidentSelect()"
        id="incidentDiv">
     <p class="formTitle" id="incidentTypeTitle">
@@ -50,20 +50,20 @@
   	  Tap to Select
     <p>
   </div>
-  <div class="formRow col-12">
+  <div class="formRow">
       <input type="text" class="hiddenInput" id="datePicker" onchange="setDate()">
       <p class="formTitle">Date Identified</p>
       <p class="formSubTitle" id="dateToChange">Tap to Change
   	<p>
   </div>
-  <div class="formRow col-12">
+  <div class="formRow">
     <input type="text" class="hiddenInput" id="timePicker" onchange="setTime()">
     <p class="formTitle">Time Identified</p>
     <p class="formSubTitle" id="timeToChange">Tap to Select
   	<p>
   </div>
 
-  <div class="formRow col-12"
+  <div class="formRow"
        onclick="openDetails()"
   	 onchange="getExtraDetails()">
     <p class="formTitle">Extra Details</p>
@@ -73,11 +73,11 @@
   <form action="" onclick="getValsFromForm()" method="POST" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
     {% csrf_token %}
     <div style="display: none">{{ form.as_p }}</div>
-    <div class="formRow col-12" onclick=''>
+    <div class="formRow">
   	  {{ form.photoPath }}
+      <!-- <input type="file"> -->
   	  <p class="formTitle">Add Photo </p>
-  	  <p class="formSubTitle" id="photoToChange">Tap to Select
-  		</p><p>
+  	  <p class="formSubTitle" id="photoToChange">Tap to Select</p>
   	</div>
   	<div class="col-12 buttonRow">
     		<input type="submit" value="Submit"

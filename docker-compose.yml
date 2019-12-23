@@ -8,7 +8,7 @@ services:
        MYSQL_DATABASE: 'CRITr'
        MYSQL_USER: 'admin_'
        MYSQL_PASSWORD: 'yG32fa*2Pe%Cr'
-       # MYSQL_ROOT_PASSWORD: '...'
+       MYSQL_ROOT_PASSWORD: 'mle51**#'
   web:
     build: .
     command: sh run.sh

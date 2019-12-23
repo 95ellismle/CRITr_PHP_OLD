@@ -13,7 +13,7 @@ function hideCards() {
 function hideActButton() {
 	document.getElementById("overlayBtn").style.display = "none";
     document.getElementById("overlayCards").style.display = "none";
-}	
+}
 
 // Will show remove the topBar for the user and go back to how the first screen was
 function backToFullMap() {
@@ -21,6 +21,8 @@ function backToFullMap() {
   document.getElementById("reportIncidentBar").style.display = "none";
   document.getElementById("viewDiv").style.height = "100%";
 }
+
+// const urls = localStorage.getItem("urls");
 
 // Will get the activities to display on the bottom panel
 function getActivities() {
@@ -37,7 +39,7 @@ function getActivities() {
                  ' in the area and the users need to be warned. That was just' +
                  ' an example but I\'m sure there\'ll be more useful details' +
                  ' This space is for that rather than this filler text.',
-                 'imageLocation': 'img/patrolSmall.jpg',
+                 'imageLocation': urls['img_folder']+'patrolSmall.jpg',
                },
 
                 {'title': 'Litter Picking',
@@ -51,7 +53,7 @@ function getActivities() {
                  ' in the area and the users need to be warned. That was just' +
                  ' an example but I\'m sure there\'ll be more useful details' +
                  ' This space is for that rather than this filler text.',
-                 'imageLocation': 'img/litterSmall.jpg',
+                 'imageLocation': urls['img_folder']+'litterSmall.jpg',
                },
                {'title': 'Litter Picking',
                 'date': 'Wednesday',
@@ -64,7 +66,7 @@ function getActivities() {
                 ' in the area and the users need to be warned. That was just' +
                 ' an example but I\'m sure there\'ll be more useful details' +
                 ' This space is for that rather than this filler text.',
-                'imageLocation': 'img/litterSmall.jpg',
+                'imageLocation': urls['img_folder']+'litterSmall.jpg',
               },
               {'title': 'Litter Picking',
                'date': 'Wednesday',
@@ -77,7 +79,7 @@ function getActivities() {
                ' in the area and the users need to be warned. That was just' +
                ' an example but I\'m sure there\'ll be more useful details' +
                ' This space is for that rather than this filler text.',
-               'imageLocation': 'img/litterSmall.jpg',
+               'imageLocation': urls['img_folder']+'litterSmall.jpg',
              },
                ];
    return activities;
@@ -302,4 +304,3 @@ function createCard(dict, i) {
 
     return cardDiv;
 }
-
