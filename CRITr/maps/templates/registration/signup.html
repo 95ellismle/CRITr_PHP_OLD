@@ -119,37 +119,37 @@
     }
 
 
-		// // Validate a username
-		// function styleField(id, color) {
-		// 	var userInp = document.getElementById(id);
-		// 	if (userInp.value) {
-		// 		userInp.style.border = "1px solid " + color;
-		// 	} else {
-		// 		userInp.style.border = "0";
-		// 	}
-		// }
-		// $("#id_username").on("input", function() {
-		// 	  var username = $(this).val();
-		// 		$.ajax({
-		// 			url: urls['validate_username'],
-		// 			dataType: 'json',
-		// 			type: 'get',
-		// 			contentType: 'application/x-www-form-urlencoded',
-		// 			data: {'username': username},
-		// 			success: function(data){
-		// 					if (data.is_taken) {
-		// 						styleField("id_username", '#e60000');
-		// 						$("#nxtBtn_0").hide();
-		// 					} else {
-		// 						styleField("id_username", '#00802b');
-		// 						$("#nxtBtn_0").show();
-		// 					}
-		// 			},
-		// 			error: function( jqXhr, textStatus, errorThrown ){
-		// 				console.log( errorThrown );
-		// 			}
-		// 		});
-		// });
+		// Validate a username
+		function styleField(id, color) {
+			var userInp = document.getElementById(id);
+			if (userInp.value) {
+				userInp.style.border = "1px solid " + color;
+			} else {
+				userInp.style.border = "0";
+			}
+		}
+		$("#id_username").on("input", function() {
+			  var username = $(this).val();
+				$.ajax({
+					url: urls['validate_username'],
+					dataType: 'json',
+					type: 'get',
+					contentType: 'application/x-www-form-urlencoded',
+					data: {'username': username},
+					success: function(data){
+							if (data.is_taken) {
+								styleField("id_username", '#e60000');
+								$("#nxtBtn_0").hide();
+							} else {
+								styleField("id_username", '#00802b');
+								$("#nxtBtn_0").show();
+							}
+					},
+					error: function( jqXhr, textStatus, errorThrown ){
+						console.log( errorThrown );
+					}
+				});
+		});
 
 		// Validate the email
 		function validate_emailFnc(data) {

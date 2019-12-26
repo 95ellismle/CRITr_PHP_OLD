@@ -52,21 +52,34 @@
 
   <!-- ESRI Maps Stuff -->
   <div id="viewDiv">
+      <!-- Button to show activities to start -->
       <div id="topbar" style="background-color: rgba(0,0,0,0);">
-          <button class="action-button" id="pointButton"
-                  type="button" title="Report Incident"
-                  style="align: center;">
+          <button class="action-button" id="openActivities"
+                  type="button" style="align: center;">
               <i class="material-icons" style="font-size: 50px;">add</i>
           </button>
-          <div class="overlayAdd">
-
-          </div>
       </div>
+
+      <!-- Button to show cards -->
       <div id="overlayBtn"
            style="position: absolute: bottom:0; left:5%; display: block; width: 90%;">
           <button class="action-button" id="activitiesBtn"
-                  type="button" title="Report Incident" style="width: 30%; height: 50px; margin-left: 35%;"
+                  type="button" style="width: 30%; height: 50px; margin-left: 35%;"
                   onclick="showCards()"><i class="material-icons" style="font-size: 50px;">keyboard_arrow_up</i></button>
+      </div>
+
+      <div id="overlayAdd" style="display: none;">
+        <div class="addDiv">
+          <button type="button" id="pointButton"
+          style="position: absolute; z-index: 2; width: 100%; height: 30px; opacity: 0;"></button>
+          <span class="addPara"><i class="material-icons" style="font-size: 18px;">note_add</i> Report Incident</span>
+        </div>
+        <div class="addDiv">
+          <span class="addPara"><i class="material-icons" style="font-size: 18px;">local_parking</i> Plan Activity</span>
+        </div>
+        <div class="addDiv">
+          <span class="addPara"><i class="material-icons" style="font-size: 18px;">play_arrow</i> Start Activity</span>
+        </div>
       </div>
   </div>
 
@@ -96,6 +109,11 @@
         var cardDiv = createCardOverlay(currDict, i);
         cardRow.appendChild(cardDiv);
     }
+
+    $('#openActivities').click(function() {
+      $('#openActivities').hide();
+      $('#overlayAdd').show();
+    });
 </script>
 {% endblock %}
 

@@ -34,12 +34,12 @@ def reportIncident(request):
     else:
         form = IncidentForm()
 
-    return render(request, "maps/reportIncident.html",
+    return render(request, "reporting/reportIncident.html",
                   {'form': form, "succes": False})
 
 @login_required
 def successful_report(request):
-    return render(request, "maps/successfulIncident.html", {})
+    return render(request, "reporting/successfulIncident.html", {})
 
 def signup(request):
     if request.method == 'POST':
