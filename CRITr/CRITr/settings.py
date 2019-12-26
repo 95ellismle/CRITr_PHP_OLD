@@ -69,7 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'CRITr.wsgi.application'
-
+LOGIN_REDIRECT_URL = "maps"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -105,7 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Where to go after logging in
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/maps'
+LOGOUT_REDIRECT_URL = '/'
 
 # Email
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

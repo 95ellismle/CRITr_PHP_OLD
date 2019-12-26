@@ -7,6 +7,8 @@ function showCards() {
 function hideCards() {
     document.getElementById("overlayBtn").style.display = "flex";
     document.getElementById("overlayCards").style.display = "none";
+    document.getElementById("overlayAdd").style.display = "none";
+    document.getElementById("openActivities").style.display = "block";
 }
 
 // Will hide the activities button

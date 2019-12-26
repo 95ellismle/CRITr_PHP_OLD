@@ -27,6 +27,7 @@ function getData(table, columns="*", func=false, extraQ="") {
 
 function cancelCreate(){};
 function submitReport(){};
+var reportedPoints = [];
 
 
 require([
@@ -230,15 +231,20 @@ require([
 
 		cancelCreate = function () {
 			sketchViewModel.cancel("point");
+			$('#openActivities').show();
+			$('#overlayAdd').hide();
 			backToFullMap();
 		}
 
 		// Create the drop a pin button
 		var drawPointButton = document.getElementById("pointButton");
 		drawPointButton.onclick = function () {
-			sketchViewModel.create("point");
+			reportedPoints.push(sketchViewModel.create("point"));
+			console.log(reportedPoints);
 
 			document.getElementById("overlayCards").style.display = 'none';
+			document.getElementById("overlayAdd").style.display = 'none';
+			document.getElementById("openActivities").style.display = 'none';
 			document.getElementById("overlayBtn").style.display = 'inline-block';
 
 			var mapView = document.getElementById("viewDiv");
@@ -292,7 +298,7 @@ require([
 			}
 		}, 5000);
 
-		track.start();
+		// track.start();
 	}); // End view.when
 
 });

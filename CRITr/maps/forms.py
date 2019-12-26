@@ -32,7 +32,7 @@ class SignUpForm(UserCreationForm):
         model = User
         # fields = ('first_name', 'last_name', 'username', 'email', 'password1',
                   # 'password2',)
-        fields = ('email', 'password1',
+        fields = ('username', 'email', 'password1',
                   'password2',)
 
     def __init__(self, *args, **kwargs):

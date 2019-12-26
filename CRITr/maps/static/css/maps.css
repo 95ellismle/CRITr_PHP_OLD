@@ -73,13 +73,32 @@ html {
 	background-color: rgba(0,0,0,0);
 	z-index: 2;
 }
-.overlayAdd {
-	width: 360px;
-	height: 150px;
-	display: block;
+#overlayAdd {
 	position: absolute;
-	background-color: white;
-	border: 1px solid #ccc;
+	background-color: #fff;
+	width: 190px;
+	height: 90px;
+	float: left;
+	top: 10px;
+	right: 10px;
+	border-radius: 16px;
+}
+.addPara {
+	width: 100%;
+	font-size: 16px;
+	text-align: right;
+	line-height: 30px;
+}
+.addDiv {
+	height: 30px;
+	/* border: 1px solid black; */
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+.addDiv:hover {
+	background-color: #eee;
+	cursor: pointer;
 }
 #overlayBtn {
 	position: fixed;

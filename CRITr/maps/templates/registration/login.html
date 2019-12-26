@@ -5,31 +5,39 @@
 
 
 {% block content %}
-<div id="loginOverlay" class="boxOverlay">
-	<div style="height: 50%;">
-		<img id="logo" src="{% static 'img/critrLogo.png' %}" width="96%" style="margin: 2%; align: center;">
-	</div>
+{% if user.is_authenticated %}
+	<script>
+		window.location.href = "{% url 'maps' %}";
+	</script>
 
-  <form class="loginForm">
-      <div class="loginFormRow">
-				<input type="email" placeholder="Username" name="username" class="loginFormInput">
-			</div>
-			<div class="loginFormRow">
-				<input type="password" placeholder="Password" name="password" class="loginFormInput">
-			</div>
-			<div class="loginFormRow">
-				 <input type="submit" name="login" class="loginBtn" value="Login">
-			</div>
-  </form>
-  <div class="loginFormRow">
-    <script type="text/javascript">
-        const signUpPage = "{% url 'signup' %}";
-    </script>
-     <button type="link" class="submitBtn"
-             onclick="window.location.href = signUpPage;">
-       Sign Up
-     </button>
-  </div>
-</div>
+{% else %}
+	<div id="loginOverlay" class="boxOverlay">
+		<div style="height: 50%;">
+			<img id="logo" src="{% static 'img/critrLogo.png' %}" width="96%" style="margin: 2%; align: center;">
+		</div>
+
+	  <form class="loginForm" method="post">
+				{% csrf_token %}
+	      <div class="loginFormRow">
+					<input type="text" placeholder="Username" name="username" class="loginFormInput">
+				</div>
+				<div class="loginFormRow">
+					<input type="password" placeholder="Password" name="password" class="loginFormInput">
+				</div>
+				<div class="loginFormRow">
+					 <input type="submit" name="login" class="loginBtn" value="Login">
+				</div>
+	  </form>
+	  <div class="loginFormRow">
+	    <script type="text/javascript">
+	        const signUpPage = "{% url 'signup' %}";
+	    </script>
+	     <button type="link" class="submitBtn"
+	             onclick="window.location.href = signUpPage;">
+	       Sign Up
+	     </button>
+	  </div>
+	</div>
+{% endif %}
 
 {% endblock %}
