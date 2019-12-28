@@ -242,10 +242,11 @@ require([
 			reportedPoints.push(sketchViewModel.create("point"));
 			console.log(reportedPoints);
 
-			document.getElementById("overlayCards").style.display = 'none';
+			// document.getElementById("overlayCards").style.display = 'none';
 			document.getElementById("overlayAdd").style.display = 'none';
 			document.getElementById("openActivities").style.display = 'none';
-			document.getElementById("overlayBtn").style.display = 'inline-block';
+			$('#fullOverlay').hide();
+			// document.getElementById("overlayBtn").style.display = 'inline-block';
 
 			var mapView = document.getElementById("viewDiv");
 			mapView.style.position = "absolute";

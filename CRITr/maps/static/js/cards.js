@@ -1,20 +1,66 @@
 function showCards() {
-    document.getElementById("overlayBtn").style.display = "none";
-    document.getElementById("overlayCards").style.display = "flex";
+    // document.getElementById("overlayBtn").style.display = "none";
+    // document.getElementById("overlayCards").style.display = "flex";
 }
 
 // Will hide the cards overlay
 function hideCards() {
-    document.getElementById("overlayBtn").style.display = "flex";
-    document.getElementById("overlayCards").style.display = "none";
-    document.getElementById("overlayAdd").style.display = "none";
+    // document.getElementById("overlayBtn").style.display = "flex";
+    // document.getElementById("overlayCards").style.display = "none";
     document.getElementById("openActivities").style.display = "block";
+    $('#startActivityBtn').hide()
 }
 
 // Will hide the activities button
 function hideActButton() {
-	document.getElementById("overlayBtn").style.display = "none";
-    document.getElementById("overlayCards").style.display = "none";
+	// document.getElementById("overlayBtn").style.display = "none";
+    // document.getElementById("overlayCards").style.display = "none";
+}
+
+function setStartActDim() {
+  // Set the button heights
+  var choices = document.getElementsByClassName("actChoice");
+  var btnWidth = choices[0].clientWidth;
+  var btnRow = document.getElementById("activityChoices");
+  var rowWidth = btnRow.clientWidth;
+  var numSquares = choices.length;
+  var margin = Math.floor(
+                          (
+                           (rowWidth * (1-(0.01*(numSquares-1)))
+                            - (numSquares * btnWidth)
+                           )
+                          ) / 2
+                         )
+               - 5;
+  btnRow.style.height = btnWidth.toString() + "px";
+  choices[0].style.marginLeft = margin.toString() + "px";
+
+  // Set the top margin
+  var activityDiv = document.getElementById("startActivityOverlay");
+  var windowHeight = window.innerHeight;
+  var vertMargin = Math.floor((windowHeight - activityDiv.clientHeight)/2) - 10;
+  activityDiv.style.top = vertMargin.toString() + "px";
+
+  // Set the left margin
+  var windowWidth = window.innerWidth;
+  var horizMargin =  Math.floor((windowWidth - activityDiv.clientWidth)/2);
+  activityDiv.style.left = horizMargin.toString() + "px";
+}
+
+function openStartActivity() {
+  $('#overlayAdd').hide();
+  $('#openActivities').show();
+  document.getElementById("fullOverlay").style.display = "block";
+  document.getElementById("startActivityOverlay").style.display = "block";
+  $('#openActivities').hide();
+  setStartActDim();
+}
+
+function resetMapsPage() {
+  $('#startActivityOverlay').hide();
+  $('#fullOverlay').hide();
+  $('#overlayAdd').hide();
+  $('#openActivities').show();
 }
 
 // Will show remove the topBar for the user and go back to how the first screen was

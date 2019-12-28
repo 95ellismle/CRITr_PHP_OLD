@@ -14,6 +14,7 @@
   };
 </script>
 <script src="{% static 'js/maps.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static 'css/startActivityOverlay.css' %}">
 
 {% endblock %}
 
@@ -61,12 +62,12 @@
       </div>
 
       <!-- Button to show cards -->
-      <div id="overlayBtn"
+      <!-- <div id="overlayBtn"
            style="position: absolute: bottom:0; left:5%; display: block; width: 90%;">
           <button class="action-button" id="activitiesBtn"
                   type="button" style="width: 30%; height: 50px; margin-left: 35%;"
                   onclick="showCards()"><i class="material-icons" style="font-size: 50px;">keyboard_arrow_up</i></button>
-      </div>
+      </div> -->
 
       <div id="overlayAdd" style="display: none;">
         <div class="addDiv">
@@ -74,14 +75,47 @@
           style="position: absolute; z-index: 2; width: 100%; height: 30px; opacity: 0;"></button>
           <span class="addPara"><i class="material-icons" style="font-size: 18px;">note_add</i> Report Incident</span>
         </div>
-        <div class="addDiv">
+        <div class="addDiv inactive">
           <span class="addPara"><i class="material-icons" style="font-size: 18px;">local_parking</i> Plan Activity</span>
         </div>
-        <div class="addDiv">
+        <div class="addDiv" id="startAct" onclick="openStartActivity()">
           <span class="addPara"><i class="material-icons" style="font-size: 18px;">play_arrow</i> Start Activity</span>
         </div>
       </div>
   </div>
+
+  <!-- The start activity overlay -->
+  <div id="fullOverlay" onclick="resetMapsPage()">
+
+  </div>
+  <div id="startActivityOverlay">
+      <div class="title">
+        Select Activity Type
+      </div>
+
+      <div id="activityChoices">
+        <div class="actChoice active selected" id="patrolAct" onclick="selectActivity(this)">
+          <img src="{% static 'img/walkingIcon.png' %}" class="imgIcon">
+          <p class="imgTxt">Patrol</p>
+        </div>
+        <div class="inactive actChoice" onclick="selectActivity(this)">
+          <img src="{% static 'img/speedometerIcon.png' %}" id="speedWatchAct" class="imgIcon">
+          <p class="imgTxt">Speedwatch</p>
+        </div>
+        <div class="inactive actChoice" style="margin-right: 0;" onclick="selectActivity(this)">
+          <img src="{% static 'img/starredCalendarIcon.png' %}" id="commEventAct" class="imgIcon">
+          <p class="imgTxt">Event</p>
+        </div>
+      </div>
+
+      <!-- <div class="addRow">
+        <p class="rowHead">Add Other Members</p>
+        <p class="rowSubHead">Tap to add other members (if applicable)</p>
+      </div> -->
+
+      <button class="startActivityBtn" onclick="startActivity()">Start Activity</button>
+    </div>
+
 
   <!-- Start the card interface -->
   <div id="overlayCards" style="display: none;">
@@ -94,26 +128,32 @@
 </body>
 
 {% block additionalScriptsFoot %}
-<script src="{% static 'js/cards.js' %}" type="text/javascript"></script>
-<script>
-    activities = getActivities();
-    // Loop over all activities and add them to the screen
-    var len = activities.length;
-    if (len > 10) {
-        len = 10;
-    }
-    for (var i=0; i<activities.length; i++) {
-        currDict = activities[i];
-        var cardRow = document.getElementById("cardRow");
 
-        var cardDiv = createCardOverlay(currDict, i);
-        cardRow.appendChild(cardDiv);
-    }
+<script src="{% static 'js/cards.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/startActivity.js' %}" type="text/javascript"></script>
+<script>
+    // activities = getActivities();
+    // // Loop over all activities and add them to the screen
+    // var len = activities.length;
+    // if (len > 10) {
+    //     len = 10;
+    // }
+    // for (var i=0; i<activities.length; i++) {
+    //     currDict = activities[i];
+    //     var cardRow = document.getElementById("cardRow");
+    //
+    //     var cardDiv = createCardOverlay(currDict, i);
+    //     cardRow.appendChild(cardDiv);
+    // }
 
     $('#openActivities').click(function() {
       $('#openActivities').hide();
+      $('#fullOverlay').show();
       $('#overlayAdd').show();
     });
+</script>
+<script type="text/javascript">
+
 </script>
 {% endblock %}
 

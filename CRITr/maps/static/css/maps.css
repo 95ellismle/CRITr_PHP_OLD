@@ -82,6 +82,7 @@ html {
 	top: 10px;
 	right: 10px;
 	border-radius: 16px;
+	z-index: 3;
 }
 .addPara {
 	width: 100%;
@@ -110,8 +111,8 @@ html {
 }
 .cardTop {
 	height: 32%;
-	width: 100%
-		text-align: center;
+	width: 100%;
+    text-align: center;
 }
 .cardBottom {
 	vertical-align: baseline;
@@ -284,6 +285,17 @@ html {
 	z-index: 3;
 	display: none;
 }
+#fullOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.4;
+	z-index: 2;
+	display: none;
+}
 .selectFont {
 	font-size: 3vh;
 }
@@ -407,6 +419,7 @@ html {
 	margin-top: -250px;
 	left: 50%;
 	margin-left: -150px;
+    border-radius: 10px;
 }
 .loginFormInput {
 		width: 100%;
@@ -426,7 +439,7 @@ html {
 		border: 0px solid black;
 }
 .loginBtn, .submitBtn {
-		background-color: #ff6600;
+		background-color: #ff5722;
 		border: 0;
 		color: white;
 		width: 50%;

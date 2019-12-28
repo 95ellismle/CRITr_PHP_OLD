@@ -12,7 +12,7 @@
 		<img id="logo" src="{% static 'img/critrLogo.png' %}" width="96%" style="margin: 2%; align: center;">
 	</div>
 
-  <form class="loginForm" style="width: 100%" method="post">
+  <form id="signupForm" class="loginForm" style="width: 100%" method="post">
 		{% csrf_token %}
     {% for field in form %}
 		    {% if forloop.counter == 1 %}
@@ -37,18 +37,18 @@
 		        <!-- Just the next button -->
  		        {% if forloop.counter == 1 %}
 		          <button class="nextBtn btn" id="nxtBtn_{{ forloop.counter }}"
-					  	 				onclick="showNext()">
+					  	 				onclick="showNext()" style="display: none;">
 		            <i class="material-icons">arrow_forward</i>
 		          </button>
 
 					  	<!-- The next and previous buttons -->
 					  {%  elif forloop.counter < form_len_sub1 %}
 					  	<button class="prevBtn btn"
-					  				  onclick="showPrev()">
+					  				  onclick="showPrev()" >
 					  		<i class="material-icons">arrow_backward</i>
 					  	</button>
 					  	<button class="nextBtn btn" id="nxtBtn_{{ forloop.counter }}"
-					  					onclick="showNext()">
+					  					onclick="showNext()" style="display: none;">
 					  		<i class="material-icons">arrow_forward</i>
 					  	</button>
 
@@ -61,12 +61,12 @@
 							  <p id="special" class="invalid">A <b>special</b> character</p>
 						 </div>
 					  	<button class="prevBtn btn"
-					  		onclick="showPrev()">
+					  		onclick="showPrev()" >
 					  		<i class="material-icons">arrow_backward</i>
 					  	</button>
 
 							<div class="loginFormRow" id="signupBtn">
-								<input type="submit" name="login" class="loginBtn" value="Signup">
+								<input type="submit" name="login" class="loginBtn" value="Signup" disabled=true>
 							</div>
 		        {% endif %}
 
@@ -96,7 +96,14 @@
 </script>
 
 <script type="text/javascript">
+	  var fieldsOK = [false, false, false, false, false];
+		var ids = ['#id_first_name', '#id_second_name', '#id_username', '#id_email', '#id_password'];
+
     function showNext() {
+			if (!fieldsOK[currentPage-1] || $(ids[currentPage-1]).val() == "") {
+				console.log(currentPage-1, fieldsOK[currentPage-1], $(ids[currentPage-1]).val());
+				return;
+			}
 			var nextPage = currentPage + 1;
 			if (nextPage > {{ form_len }}) {
 				nextPage = {{ form_len }};
@@ -128,6 +135,15 @@
 				userInp.style.border = "0";
 			}
 		}
+
+		// Validate first name
+		$('#id_first_name').on("input", function() {
+			if ($(this).val) {
+				$('#nxtBtn_1').show();
+			} else {
+				$('#nxtBtn_1').hide();
+			}
+		})
 		$("#id_username").on("input", function() {
 			  var username = $(this).val();
 				$.ajax({
@@ -139,10 +155,12 @@
 					success: function(data){
 							if (data.is_taken) {
 								styleField("id_username", '#e60000');
-								$("#nxtBtn_0").hide();
+								$("#nxtBtn_3").hide();
+								fieldsOK[0] = false;
 							} else {
 								styleField("id_username", '#00802b');
-								$("#nxtBtn_0").show();
+								fieldsOK[0] = true;
+								$("#nxtBtn_3").show();
 							}
 					},
 					error: function( jqXhr, textStatus, errorThrown ){
@@ -166,13 +184,14 @@
 				$("#errorAJAX_1").html(errMsg);
 				if (errMsg) {
 					// Red Style
+					fieldsOK[1] = false;
 					styleField("id_email", '#e60000');
-					$("#nxtBtn_1").hide();
+					$("#nxtBtn_4").hide();
 				} else {
 					// Green Style
+					fieldsOK[1] = true;
 					styleField("id_email", "#00802b");
-					// styleField("id_email", "green");
-					$("#nxtBtn_1").show();
+					$("#nxtBtn_4").show();
 				}
 		}
 
@@ -267,6 +286,7 @@
 				$("#message").show();
 			}
 		});
+
 		$("#id_password2").on("input", function() {
 			var pwd1 = $("#id_password1").val();
 			var pwd2 = $(this).val();
@@ -274,11 +294,16 @@
 			console.log(pwd1, pwd2, pwd1 == pwd2);
 
 			if (pwd1 == pwd2) {
+				$('#signupBtn').disable();
 				$("#signupBtn").show();
 			} else {
+				$('#signupBtn').enable();
 				$("#signupBtn").hide();
 			}
 		});
 
+		$('#signupForm').on("submit", function() {
+
+		});
 </script>
 {% endblock %}
